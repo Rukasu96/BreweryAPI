@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Migrations\\20250605132038_Brewery, Beers, BeerType tables with configurations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:BreweryAPI\\Migrations\\20250605132038_Brewery, Beers, BeerType tables with configurations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|c:\\users\\kuksz\\desktop\\breweryapi\\breweryapi\\migrations\\20250606170100_added address table and properties to brewery table.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|solutionrelative:breweryapi\\migrations\\20250606170100_added address table and properties to brewery table.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|c:\\users\\kuksz\\desktop\\breweryapi\\breweryapi\\entities\\beer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|solutionrelative:breweryapi\\entities\\beer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|c:\\users\\kuksz\\desktop\\breweryapi\\breweryapi\\models\\validators\\registeruserdtovalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|solutionrelative:breweryapi\\models\\validators\\registeruserdtovalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|c:\\users\\kuksz\\desktop\\breweryapi\\breweryapi\\entities\\brewery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|solutionrelative:breweryapi\\entities\\brewery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|c:\\users\\kuksz\\desktop\\breweryapi\\breweryapi\\requests\\accountrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|solutionrelative:breweryapi\\requests\\accountrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|c:\\users\\kuksz\\desktop\\breweryapi\\breweryapi\\entities\\brewerycontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|solutionrelative:breweryapi\\entities\\brewerycontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|c:\\users\\kuksz\\desktop\\breweryapi\\breweryapi\\services\\breweryaccountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|solutionrelative:breweryapi\\services\\breweryaccountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A6681ECA-F188-4461-86AA-9845FEA9E6BC}|BreweryAPI\\BreweryAPI.csproj|c:\\users\\kuksz\\desktop\\breweryapi\\breweryapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -35,53 +35,53 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "20250605132038_Brewery, Beers, BeerType tables with configurations.cs",
-              "DocumentMoniker": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Migrations\\20250605132038_Brewery, Beers, BeerType tables with configurations.cs",
-              "RelativeDocumentMoniker": "BreweryAPI\\Migrations\\20250605132038_Brewery, Beers, BeerType tables with configurations.cs",
-              "ToolTip": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Migrations\\20250605132038_Brewery, Beers, BeerType tables with configurations.cs",
-              "RelativeToolTip": "BreweryAPI\\Migrations\\20250605132038_Brewery, Beers, BeerType tables with configurations.cs",
-              "ViewState": "AgIAADQAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Title": "20250606170100_Added Address table and properties to brewery table.cs",
+              "DocumentMoniker": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Migrations\\20250606170100_Added Address table and properties to brewery table.cs",
+              "RelativeDocumentMoniker": "BreweryAPI\\Migrations\\20250606170100_Added Address table and properties to brewery table.cs",
+              "ToolTip": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Migrations\\20250606170100_Added Address table and properties to brewery table.cs",
+              "RelativeToolTip": "BreweryAPI\\Migrations\\20250606170100_Added Address table and properties to brewery table.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-05T13:20:38.493Z",
+              "WhenOpened": "2025-06-06T17:01:00.736Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Beer.cs",
-              "DocumentMoniker": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Entities\\Beer.cs",
-              "RelativeDocumentMoniker": "BreweryAPI\\Entities\\Beer.cs",
-              "ToolTip": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Entities\\Beer.cs",
-              "RelativeToolTip": "BreweryAPI\\Entities\\Beer.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAwAAAAAAAAAA==",
+              "Title": "RegisterUserDtoValidator.cs",
+              "DocumentMoniker": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Models\\Validators\\RegisterUserDtoValidator.cs",
+              "RelativeDocumentMoniker": "BreweryAPI\\Models\\Validators\\RegisterUserDtoValidator.cs",
+              "ToolTip": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Models\\Validators\\RegisterUserDtoValidator.cs",
+              "RelativeToolTip": "BreweryAPI\\Models\\Validators\\RegisterUserDtoValidator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvxEAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-05T13:19:34.336Z",
+              "WhenOpened": "2025-06-06T16:50:05.496Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Brewery.cs",
-              "DocumentMoniker": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Entities\\Brewery.cs",
-              "RelativeDocumentMoniker": "BreweryAPI\\Entities\\Brewery.cs",
-              "ToolTip": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Entities\\Brewery.cs",
-              "RelativeToolTip": "BreweryAPI\\Entities\\Brewery.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAFAAAAAAAAAA==",
+              "Title": "AccountRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Requests\\AccountRequest.cs",
+              "RelativeDocumentMoniker": "BreweryAPI\\Requests\\AccountRequest.cs",
+              "ToolTip": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Requests\\AccountRequest.cs",
+              "RelativeToolTip": "BreweryAPI\\Requests\\AccountRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-05T11:58:56.065Z",
+              "WhenOpened": "2025-06-06T13:36:23.311Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "BreweryContext.cs",
-              "DocumentMoniker": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Entities\\BreweryContext.cs",
-              "RelativeDocumentMoniker": "BreweryAPI\\Entities\\BreweryContext.cs",
-              "ToolTip": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Entities\\BreweryContext.cs",
-              "RelativeToolTip": "BreweryAPI\\Entities\\BreweryContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAbAAAAAAAAAA==",
+              "Title": "BreweryAccountService.cs",
+              "DocumentMoniker": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Services\\BreweryAccountService.cs",
+              "RelativeDocumentMoniker": "BreweryAPI\\Services\\BreweryAccountService.cs",
+              "ToolTip": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Services\\BreweryAccountService.cs",
+              "RelativeToolTip": "BreweryAPI\\Services\\BreweryAccountService.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAB8AAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-05T11:54:56.531Z",
+              "WhenOpened": "2025-06-06T12:53:18.66Z",
               "EditorCaption": ""
             },
             {
@@ -92,7 +92,7 @@
               "RelativeDocumentMoniker": "BreweryAPI\\Program.cs",
               "ToolTip": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\Program.cs",
               "RelativeToolTip": "BreweryAPI\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAAC0AAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-05T11:46:23.014Z",
               "EditorCaption": ""

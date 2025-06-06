@@ -167,3 +167,5 @@ C:\Users\Kuksz\Desktop\BreweryAPI\BreweryAPI\obj\Debug\net8.0\refint\BreweryAPI.
 C:\Users\Kuksz\Desktop\BreweryAPI\BreweryAPI\obj\Debug\net8.0\BreweryAPI.pdb
 C:\Users\Kuksz\Desktop\BreweryAPI\BreweryAPI\obj\Debug\net8.0\BreweryAPI.genruntimeconfig.cache
 C:\Users\Kuksz\Desktop\BreweryAPI\BreweryAPI\obj\Debug\net8.0\ref\BreweryAPI.dll
+C:\Users\Kuksz\Desktop\BreweryAPI\BreweryAPI\bin\Debug\net8.0\FluentValidation.dll
+C:\Users\Kuksz\Desktop\BreweryAPI\BreweryAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

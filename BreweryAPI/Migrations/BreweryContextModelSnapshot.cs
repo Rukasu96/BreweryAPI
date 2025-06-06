@@ -22,6 +22,37 @@ namespace BreweryAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BreweryAPI.Entities.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("BreweryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BreweryId")
+                        .IsUnique();
+
+                    b.ToTable("Addresses");
+                });
+
             modelBuilder.Entity("BreweryAPI.Entities.Beer", b =>
                 {
                     b.Property<int>("Id")
@@ -76,13 +107,35 @@ namespace BreweryAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("varchar(12)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Breweries");
+                });
+
+            modelBuilder.Entity("BreweryAPI.Entities.Address", b =>
+                {
+                    b.HasOne("BreweryAPI.Entities.Brewery", "Brewery")
+                        .WithOne("Address")
+                        .HasForeignKey("BreweryAPI.Entities.Address", "BreweryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brewery");
                 });
 
             modelBuilder.Entity("BreweryAPI.Entities.Beer", b =>
@@ -111,6 +164,8 @@ namespace BreweryAPI.Migrations
 
             modelBuilder.Entity("BreweryAPI.Entities.Brewery", b =>
                 {
+                    b.Navigation("Address");
+
                     b.Navigation("Beers");
                 });
 #pragma warning restore 612, 618
