@@ -66,6 +66,9 @@ namespace BreweryAPI.Services
                 PhoneNumber = dto.PhoneNumber,
             };
 
+            var hashedPassword = passwordHasher.HashPassword(newUser, dto.Password);
+
+            newUser.PasswordHash = hashedPassword;
             context.Breweries.Add(newUser);
             context.SaveChanges();
         }

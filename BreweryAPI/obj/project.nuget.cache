@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "2HN8coiiAck=",
+  "dgSpecHash": "UqI6x2rHnDI=",
   "success": true,
   "projectFilePath": "C:\\Users\\Kuksz\\Desktop\\BreweryAPI\\BreweryAPI\\BreweryAPI.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Kuksz\\.nuget\\packages\\automapper\\14.0.0\\automapper.14.0.0.nupkg.sha512",
     "C:\\Users\\Kuksz\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Kuksz\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
     "C:\\Users\\Kuksz\\.nuget\\packages\\fluentvalidation\\12.0.0\\fluentvalidation.12.0.0.nupkg.sha512",

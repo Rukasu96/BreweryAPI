@@ -16,7 +16,7 @@ namespace BreweryAPI.Requests
         {
             var validationResult = validator.Validate(dto);
 
-            if (validationResult.IsValid) 
+            if (!validationResult.IsValid) 
             {
                 return Results.BadRequest(validationResult.Errors);
             }

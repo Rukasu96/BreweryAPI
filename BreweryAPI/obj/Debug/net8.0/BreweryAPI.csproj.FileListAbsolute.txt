@@ -169,3 +169,4 @@ C:\Users\Kuksz\Desktop\BreweryAPI\BreweryAPI\obj\Debug\net8.0\BreweryAPI.genrunt
 C:\Users\Kuksz\Desktop\BreweryAPI\BreweryAPI\obj\Debug\net8.0\ref\BreweryAPI.dll
 C:\Users\Kuksz\Desktop\BreweryAPI\BreweryAPI\bin\Debug\net8.0\FluentValidation.dll
 C:\Users\Kuksz\Desktop\BreweryAPI\BreweryAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Kuksz\Desktop\BreweryAPI\BreweryAPI\bin\Debug\net8.0\AutoMapper.dll
