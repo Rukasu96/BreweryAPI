@@ -1,6 +1,33 @@
 [
   {
     "ContainingType": "BreweryAPI.Requests.AccountRequest",
+    "Method": "Update",
+    "RelativePath": "Account/{id}",
+    "HttpMethod": "PUT",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "BreweryAPI.Models.AccountUpdateDto",
+        "IsRequired": false
+      },
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "BreweryAPI.Requests.AccountRequest",
     "Method": "Login",
     "RelativePath": "login",
     "HttpMethod": "POST",

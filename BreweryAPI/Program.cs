@@ -46,8 +46,8 @@ builder.Services.AddDbContext<BreweryContext>(
 builder.Services.AddScoped<IAccountService, BreweryAccountService>();
 builder.Services.AddScoped<IPasswordHasher<Brewery>, PasswordHasher<Brewery>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
-
-
+builder.Services.AddScoped<IUserContextService, UserContextService>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthorization();
 

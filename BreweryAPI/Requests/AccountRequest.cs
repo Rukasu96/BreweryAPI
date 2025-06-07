@@ -1,6 +1,7 @@
 ﻿using BreweryAPI.Models;
 using BreweryAPI.Services;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BreweryAPI.Requests
 {
@@ -10,6 +11,7 @@ namespace BreweryAPI.Requests
         {
             app.MapPost("/register", AccountRequest.Register);
             app.MapPost("/login", AccountRequest.Login);
+            app.MapPut("/Account/{id}", AccountRequest.Update);
         }
 
         public static IResult Register(IAccountService accountService, RegisterUserDto dto, IValidator<RegisterUserDto> validator)
@@ -28,6 +30,12 @@ namespace BreweryAPI.Requests
         {
             string token = accountService.GenerateJwt(dto);
             return Results.Ok(token);
+        }
+
+        public static IResult Update(IAccountService accountService,[FromBody] AccountUpdateDto dto, [FromRoute] Guid id)
+        {
+            accountService.UpdateAccount(dto, id);
+            return Results.Ok(dto);
         }
     }
 }

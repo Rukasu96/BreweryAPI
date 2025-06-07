@@ -1,6 +1,8 @@
 ﻿using BreweryAPI.Entities;
 using BreweryAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,24 +14,35 @@ namespace BreweryAPI.Services
     {
         void RegisterUser(RegisterUserDto dto);
         string GenerateJwt(LoginDto dto);
+        void DeleteAccount();
+        void UpdateAccount(AccountUpdateDto dto, Guid id);
     }
 
     public class BreweryAccountService : IAccountService
     {
         private readonly BreweryContext context;
         private readonly IPasswordHasher<Brewery> passwordHasher;
+        private readonly IAuthorizationService authorizationService;
         private readonly AuthenticationSettings authenticationSettings;
+        private readonly IUserContextService userContext;
 
-        public BreweryAccountService(BreweryContext context, IPasswordHasher<Brewery> passwordHasher, AuthenticationSettings authenticationSettings)
+        public BreweryAccountService(BreweryContext context, IPasswordHasher<Brewery> passwordHasher, AuthenticationSettings authenticationSettings, IAuthorizationService authorizationService, IUserContextService userContext)
         {
             this.context = context;
             this.passwordHasher = passwordHasher;
             this.authenticationSettings = authenticationSettings;
+            this.authorizationService = authorizationService;
+            this.userContext = userContext;
+        }
+
+        public void DeleteAccount()
+        {
+            throw new NotImplementedException();
         }
 
         public string GenerateJwt(LoginDto dto)
         {
-            var brewery = context.Breweries.FirstOrDefault(x => x.Email == dto.Email);
+            var brewery = context.Breweries.Include(x => x.Role).FirstOrDefault(x => x.Email == dto.Email);
 
             //badRequest
             var result = passwordHasher.VerifyHashedPassword(brewery, brewery.PasswordHash, dto.Password);
@@ -40,6 +53,7 @@ namespace BreweryAPI.Services
                 new Claim(ClaimTypes.NameIdentifier, brewery.Id.ToString()),
                 new Claim(ClaimTypes.Name, $"{brewery.Name}"),
                 new Claim(ClaimTypes.Email, $"{brewery.Email}"),
+                new Claim(ClaimTypes.Role, $"{brewery.Role.RoleName}"),
                 new Claim(ClaimTypes.MobilePhone, $"{brewery.PhoneNumber}")
             };
 
@@ -64,12 +78,34 @@ namespace BreweryAPI.Services
                 Email = dto.Email,
                 Name = dto.Name,
                 PhoneNumber = dto.PhoneNumber,
+                RoleId = dto.RoleId,
             };
 
             var hashedPassword = passwordHasher.HashPassword(newUser, dto.Password);
 
             newUser.PasswordHash = hashedPassword;
             context.Breweries.Add(newUser);
+            context.SaveChanges();
+        }
+
+        public void UpdateAccount(AccountUpdateDto dto, Guid id)
+        {
+            var brewer = context.Breweries.FirstOrDefault(x => x.Id == id);
+
+            if (brewer == null)
+            {
+                //notFound
+            }
+
+            brewer.Name = dto.Name;
+            brewer.Email = dto.Email;
+            brewer.Address = new Address()
+            {
+                City = dto.City,
+                Street = dto.Street,
+                PostalCode = dto.PostalCode,
+            };
+
             context.SaveChanges();
         }
     }
