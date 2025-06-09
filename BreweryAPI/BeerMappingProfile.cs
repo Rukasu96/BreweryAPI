@@ -10,6 +10,7 @@ namespace BreweryAPI
         {
             CreateMap<Beer, BeerDto>();
             CreateMap<CreatedBeerDto, Beer>();
+            CreateMap<BeerUpdateDto, Beer>();
         }
     }
 }

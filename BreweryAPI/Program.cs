@@ -49,7 +49,7 @@ builder.Services.AddScoped<IAccountService, BreweryAccountService>();
 builder.Services.AddScoped<IPasswordHasher<Brewery>, PasswordHasher<Brewery>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
-builder.Services.AddScoped<IBeerService, BeerService>();
+builder.Services.AddScoped<IBeerService, BreweryBeerService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthorization();
@@ -69,5 +69,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 AccountRequest.RegisterEndpoints(app);
-BeerRequests.RegisterEndpoints(app);
+BreweryBeerRequests.RegisterEndpoints(app);
 app.Run();

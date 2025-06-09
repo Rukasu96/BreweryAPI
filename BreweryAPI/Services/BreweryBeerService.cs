@@ -7,16 +7,16 @@ namespace BreweryAPI.Services
     public interface IBeerService
     {
         void CreateBeer(CreatedBeerDto dto);
-        void UpdateBeer();
-        void DeleteBeer();
+        void UpdateBeer(BeerUpdateDto dto, int id);
+        void DeleteBeer(int id);
     }
 
-    public class BeerService : IBeerService
+    public class BreweryBeerService : IBeerService
     {
         private readonly BreweryContext context;
         private readonly IMapper mapper;
         private readonly IUserContextService userContext;
-        public BeerService(BreweryContext context, IMapper mapper, IUserContextService userContext)
+        public BreweryBeerService(BreweryContext context, IMapper mapper, IUserContextService userContext)
         {
             this.context = context;
             this.mapper = mapper;
@@ -43,14 +43,20 @@ namespace BreweryAPI.Services
             context.SaveChanges();
         }
 
-        public void DeleteBeer()
+        public void DeleteBeer(int id)
         {
-            throw new NotImplementedException();
+            var beer = context.Beers.FirstOrDefault(x => x.Id == id);
+            
+            context.Beers.Remove(beer);
+            context.SaveChanges();
         }
 
-        public void UpdateBeer()
+        public void UpdateBeer(BeerUpdateDto dto, int id)
         {
-            throw new NotImplementedException();
+            var beer = context.Beers.FirstOrDefault(x => x.Id == id);
+            beer = mapper.Map<Beer>(dto);
+
+            context.SaveChanges();
         }
     }
 }

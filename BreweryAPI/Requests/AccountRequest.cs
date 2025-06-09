@@ -47,7 +47,7 @@ namespace BreweryAPI.Requests
         public static IResult Delete(IAccountService accountService)
         {
             accountService.DeleteAccount();
-            return Results.Ok();
+            return Results.NoContent();
         }
     }
 }
