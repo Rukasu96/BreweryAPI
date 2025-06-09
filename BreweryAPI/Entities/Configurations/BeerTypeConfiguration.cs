@@ -8,6 +8,18 @@ namespace BreweryAPI.Entities.Configurations
         public void Configure(EntityTypeBuilder<BeerType> builder)
         {
             builder.Property(x => x.TypeName).HasColumnName("Type").HasColumnType("varchar(10)").IsRequired();
+            builder.HasData(
+                new BeerType
+                {
+                    Id = 1,
+                    TypeName = "Pils"
+                },
+                new BeerType
+                {
+                    Id = 2,
+                    TypeName = "Ale"
+                }
+                );
         }
     }
 }

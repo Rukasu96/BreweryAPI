@@ -2,6 +2,7 @@
 using BreweryAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,7 +16,7 @@ namespace BreweryAPI.Services
         void RegisterUser(RegisterUserDto dto);
         string GenerateJwt(LoginDto dto);
         void DeleteAccount();
-        void UpdateAccount(AccountUpdateDto dto, Guid id);
+        void UpdateAccount(AccountUpdateDto dto);
     }
 
     public class BreweryAccountService : IAccountService
@@ -33,11 +34,6 @@ namespace BreweryAPI.Services
             this.authenticationSettings = authenticationSettings;
             this.authorizationService = authorizationService;
             this.userContext = userContext;
-        }
-
-        public void DeleteAccount()
-        {
-            throw new NotImplementedException();
         }
 
         public string GenerateJwt(LoginDto dto)
@@ -88,24 +84,38 @@ namespace BreweryAPI.Services
             context.SaveChanges();
         }
 
-        public void UpdateAccount(AccountUpdateDto dto, Guid id)
-        {
-            var brewer = context.Breweries.FirstOrDefault(x => x.Id == id);
 
-            if (brewer == null)
+        public void UpdateAccount(AccountUpdateDto dto)
+        {
+            var brewery = context.Breweries.FirstOrDefault(x => x.Id == userContext.GetUserId);
+
+            if (brewery == null)
             {
                 //notFound
             }
 
-            brewer.Name = dto.Name;
-            brewer.Email = dto.Email;
-            brewer.Address = new Address()
+            brewery.Name = dto.Name;
+            brewery.Email = dto.Email;
+            brewery.Address = new Address()
             {
                 City = dto.City,
                 Street = dto.Street,
                 PostalCode = dto.PostalCode,
             };
 
+            context.SaveChanges();
+        }
+
+        public void DeleteAccount()
+        {
+            var brewery = context.Breweries.FirstOrDefault(x => x.Id == userContext.GetUserId);
+            
+            if (brewery == null)
+            {
+                //notFound
+            }
+
+            context.Breweries.Remove(brewery);
             context.SaveChanges();
         }
     }

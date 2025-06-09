@@ -1,0 +1,15 @@
+﻿using AutoMapper;
+using BreweryAPI.Entities;
+using BreweryAPI.Models;
+
+namespace BreweryAPI
+{
+    public class BeerMappingProfile : Profile
+    {
+        public BeerMappingProfile()
+        {
+            CreateMap<Beer, BeerDto>();
+            CreateMap<CreatedBeerDto, Beer>();
+        }
+    }
+}

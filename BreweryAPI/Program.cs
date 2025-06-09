@@ -8,6 +8,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,10 +44,12 @@ builder.Services.AddDbContext<BreweryContext>(
         option => option.UseSqlServer(builder.Configuration.GetConnectionString("ConnString"))
     );
 
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IAccountService, BreweryAccountService>();
 builder.Services.AddScoped<IPasswordHasher<Brewery>, PasswordHasher<Brewery>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
+builder.Services.AddScoped<IBeerService, BeerService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthorization();
@@ -66,4 +69,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 AccountRequest.RegisterEndpoints(app);
+BeerRequests.RegisterEndpoints(app);
 app.Run();

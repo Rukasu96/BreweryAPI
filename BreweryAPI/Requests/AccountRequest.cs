@@ -1,7 +1,10 @@
 ﻿using BreweryAPI.Models;
 using BreweryAPI.Services;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BreweryAPI.Requests
 {
@@ -11,7 +14,8 @@ namespace BreweryAPI.Requests
         {
             app.MapPost("/register", AccountRequest.Register);
             app.MapPost("/login", AccountRequest.Login);
-            app.MapPut("/Account/{id}", AccountRequest.Update);
+            app.MapPut("/update", AccountRequest.Update);
+            app.MapDelete("/delete", AccountRequest.Delete);
         }
 
         public static IResult Register(IAccountService accountService, RegisterUserDto dto, IValidator<RegisterUserDto> validator)
@@ -32,10 +36,18 @@ namespace BreweryAPI.Requests
             return Results.Ok(token);
         }
 
-        public static IResult Update(IAccountService accountService,[FromBody] AccountUpdateDto dto, [FromRoute] Guid id)
+        [Authorize(Roles = "Brewery")]
+        public static IResult Update(IAccountService accountService,[FromBody] AccountUpdateDto dto)
         {
-            accountService.UpdateAccount(dto, id);
+            accountService.UpdateAccount(dto);
             return Results.Ok(dto);
+        }
+
+        [Authorize(Roles = "Brewery")]
+        public static IResult Delete(IAccountService accountService)
+        {
+            accountService.DeleteAccount();
+            return Results.Ok();
         }
     }
 }
