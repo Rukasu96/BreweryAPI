@@ -1,4 +1,4 @@
-﻿using BreweryAPI.Models;
+﻿using BreweryAPI.Models.Account;
 using BreweryAPI.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;

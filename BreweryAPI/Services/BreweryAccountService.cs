@@ -1,5 +1,5 @@
 ﻿using BreweryAPI.Entities;
-using BreweryAPI.Models;
+using BreweryAPI.Models.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

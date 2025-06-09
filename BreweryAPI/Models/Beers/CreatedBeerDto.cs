@@ -1,6 +1,6 @@
 ﻿using BreweryAPI.Entities;
 
-namespace BreweryAPI.Models
+namespace BreweryAPI.Models.Beers
 {
     public class CreatedBeerDto
     {

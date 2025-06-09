@@ -1,4 +1,5 @@
 ﻿using BreweryAPI.Entities;
+using BreweryAPI.Models.Account;
 using FluentValidation;
 
 namespace BreweryAPI.Models.Validators

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BreweryAPI.Entities;
-using BreweryAPI.Models;
+using BreweryAPI.Models.Beers;
 
 namespace BreweryAPI.Services
 {

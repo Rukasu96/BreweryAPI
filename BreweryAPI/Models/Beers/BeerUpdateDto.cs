@@ -1,4 +1,4 @@
-﻿namespace BreweryAPI.Models
+﻿namespace BreweryAPI.Models.Beers
 {
     public class BeerUpdateDto
     {

@@ -14,6 +14,9 @@ namespace BreweryAPI.Entities
         public DbSet<BeerType> BeerTypes { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Wholesaler> Wholesalers { get; set; }
+        public DbSet<BeerWholesaler> BeerWholesalers { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

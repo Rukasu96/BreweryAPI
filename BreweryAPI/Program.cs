@@ -1,6 +1,6 @@
 using BreweryAPI;
 using BreweryAPI.Entities;
-using BreweryAPI.Models;
+using BreweryAPI.Models.Account;
 using BreweryAPI.Models.Validators;
 using BreweryAPI.Requests;
 using BreweryAPI.Services;

@@ -1,4 +1,4 @@
-﻿using BreweryAPI.Models;
+﻿using BreweryAPI.Models.Beers;
 using BreweryAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

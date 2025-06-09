@@ -10,5 +10,6 @@
         public decimal Price { get; set; }
         public Brewery Brewery { get; set; }
         public Guid BreweryId { get; set; }
+        public List<Wholesaler> Wholesalers { get; set; }
     }
 }
