@@ -50,6 +50,7 @@ builder.Services.AddScoped<IPasswordHasher<Brewery>, PasswordHasher<Brewery>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddScoped<IBeerService, BreweryBeerService>();
+builder.Services.AddScoped<IWholesalerService, WholesalerService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthorization();
@@ -70,4 +71,5 @@ app.UseHttpsRedirection();
 
 AccountRequest.RegisterEndpoints(app);
 BreweryBeerRequests.RegisterEndpoints(app);
+WholesalerRequests.RegisterEndpoints(app);
 app.Run();

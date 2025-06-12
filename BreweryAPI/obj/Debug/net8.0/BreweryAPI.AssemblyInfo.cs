@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BreweryAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2baa44f10742f09c7e946b67050c05d8aafdce1a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d328dbc337661a820d6d87130c48aef73278c237")]
 [assembly: System.Reflection.AssemblyProductAttribute("BreweryAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BreweryAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

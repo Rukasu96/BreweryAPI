@@ -9,6 +9,7 @@ namespace BreweryAPI.Services
         void CreateBeer(CreatedBeerDto dto);
         void UpdateBeer(BeerUpdateDto dto, int id);
         void DeleteBeer(int id);
+        Beer GetById(int id);
     }
 
     public class BreweryBeerService : IBeerService
@@ -45,15 +46,20 @@ namespace BreweryAPI.Services
 
         public void DeleteBeer(int id)
         {
-            var beer = context.Beers.FirstOrDefault(x => x.Id == id);
-            
+            var beer = GetById(id);
+
             context.Beers.Remove(beer);
             context.SaveChanges();
         }
 
+        public Beer GetById(int id)
+        {
+            return context.Beers.FirstOrDefault(x => x.Id == id);
+        }
+
         public void UpdateBeer(BeerUpdateDto dto, int id)
         {
-            var beer = context.Beers.FirstOrDefault(x => x.Id == id);
+            var beer = GetById(id);
             beer = mapper.Map<Beer>(dto);
 
             context.SaveChanges();
