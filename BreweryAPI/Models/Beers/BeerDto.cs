@@ -8,6 +8,7 @@
         public int IBUPercentage { get; set; }
         public decimal StrongValue { get; set; }
         public decimal Price { get; set; }
+        public int Quantity { get; set; }
         public string Brewery { get; set; }
     }
 }

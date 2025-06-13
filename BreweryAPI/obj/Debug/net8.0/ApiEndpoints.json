@@ -1,15 +1,64 @@
 [
   {
-    "ContainingType": "BreweryAPI.Requests.BeerRequests",
+    "ContainingType": "BreweryAPI.Requests.BreweryBeerRequests",
+    "Method": "DeleteBeer",
+    "RelativePath": "brewery/beers/{id}/delete",
+    "HttpMethod": "DELETE",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "BreweryAPI.Requests.BreweryBeerRequests",
+    "Method": "UpdateBeer",
+    "RelativePath": "brewery/beers/{id}/update",
+    "HttpMethod": "PUT",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "BreweryAPI.Models.Beers.BeerUpdateDto",
+        "IsRequired": false
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "BreweryAPI.Requests.BreweryBeerRequests",
     "Method": "CreateBeer",
-    "RelativePath": "beers/create",
+    "RelativePath": "brewery/beers/create",
     "HttpMethod": "POST",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "BreweryAPI.Models.CreatedBeerDto",
+        "Type": "BreweryAPI.Models.Beers.CreatedBeerDto",
         "IsRequired": false
       }
     ],
@@ -47,7 +96,7 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "BreweryAPI.Models.LoginDto",
+        "Type": "BreweryAPI.Models.Account.LoginDto",
         "IsRequired": false
       }
     ],
@@ -69,7 +118,7 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "BreweryAPI.Models.RegisterUserDto",
+        "Type": "BreweryAPI.Models.Account.RegisterUserDto",
         "IsRequired": false
       }
     ],
@@ -91,8 +140,30 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "BreweryAPI.Models.AccountUpdateDto",
+        "Type": "BreweryAPI.Models.Account.AccountUpdateDto",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "BreweryAPI.Requests.WholesalerRequests",
+    "Method": "AddBeer",
+    "RelativePath": "wholesaler/addBeer/{id}",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": [

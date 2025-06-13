@@ -4,7 +4,8 @@ namespace BreweryAPI.Services
 {
     public interface IWholesalerService
     {
-        void AddBeer(Beer dto);
+        void AddBeer(Beer beer);
+        void RemoveBeer(Beer beer);
     }
 
     public class WholesalerService : IWholesalerService
@@ -22,6 +23,12 @@ namespace BreweryAPI.Services
         {
             var wholesaler = context.Wholesalers.FirstOrDefault(x => x.Id == userContext.GetUserId);
             wholesaler.Beers.Add(beer);
+        }
+
+        public void RemoveBeer(Beer beer)
+        {
+            var wholesaler = context.Wholesalers.FirstOrDefault(x => x.Id == userContext.GetUserId);
+            wholesaler.Beers.Remove(beer);
         }
     }
 }

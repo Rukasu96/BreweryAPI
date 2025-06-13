@@ -30,9 +30,9 @@ namespace BreweryAPI.Requests
             return Results.Ok(dto);
         }
 
-        public static IResult Login(IAccountService accountService, LoginDto dto)
+        public static IResult Login(IAccountService accountService, LoginDto dto, AccType accountType)
         {
-            string token = accountService.GenerateJwt(dto);
+            string token = accountService.GenerateJwt(dto, accountType);
             return Results.Ok(token);
         }
 

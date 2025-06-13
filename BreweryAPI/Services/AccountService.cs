@@ -2,7 +2,6 @@
 using BreweryAPI.Models.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,23 +10,30 @@ using System.Text;
 
 namespace BreweryAPI.Services
 {
+    public enum AccType
+    {
+        Brewery,
+        Wholesaler,
+        Client
+    }
+
     public interface IAccountService
     {
         void RegisterUser(RegisterUserDto dto);
-        string GenerateJwt(LoginDto dto);
+        string GenerateJwt(LoginDto dto, AccType accountType);
         void DeleteAccount();
         void UpdateAccount(AccountUpdateDto dto);
     }
 
-    public class BreweryAccountService : IAccountService
+    public class AccountService : IAccountService
     {
         private readonly BreweryContext context;
-        private readonly IPasswordHasher<Brewery> passwordHasher;
+        private readonly IPasswordHasher<UserAccount> passwordHasher;
         private readonly IAuthorizationService authorizationService;
         private readonly AuthenticationSettings authenticationSettings;
         private readonly IUserContextService userContext;
 
-        public BreweryAccountService(BreweryContext context, IPasswordHasher<Brewery> passwordHasher, AuthenticationSettings authenticationSettings, IAuthorizationService authorizationService, IUserContextService userContext)
+        public AccountService(BreweryContext context, IPasswordHasher<UserAccount> passwordHasher, AuthenticationSettings authenticationSettings, IAuthorizationService authorizationService, IUserContextService userContext)
         {
             this.context = context;
             this.passwordHasher = passwordHasher;
@@ -36,21 +42,23 @@ namespace BreweryAPI.Services
             this.userContext = userContext;
         }
 
-        public string GenerateJwt(LoginDto dto)
+        public string GenerateJwt(LoginDto dto, AccType accountType)
         {
-            var brewery = context.Breweries.Include(x => x.Role).FirstOrDefault(x => x.Email == dto.Email);
+            UserAccount account;
+
+            account = GetAccountType(dto, accountType);
 
             //badRequest
-            var result = passwordHasher.VerifyHashedPassword(brewery, brewery.PasswordHash, dto.Password);
+            var result = passwordHasher.VerifyHashedPassword(account, account.PasswordHash, dto.Password);
             //badRequest
 
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.NameIdentifier, brewery.Id.ToString()),
-                new Claim(ClaimTypes.Name, $"{brewery.Name}"),
-                new Claim(ClaimTypes.Email, $"{brewery.Email}"),
-                new Claim(ClaimTypes.Role, $"{brewery.Role.RoleName}"),
-                new Claim(ClaimTypes.MobilePhone, $"{brewery.PhoneNumber}")
+                new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
+                new Claim(ClaimTypes.Name, $"{account.Name}"),
+                new Claim(ClaimTypes.Email, $"{account.Email}"),
+                new Claim(ClaimTypes.Role, $"{account.Role.RoleName}"),
+                new Claim(ClaimTypes.MobilePhone, $"{account.PhoneNumber}")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey));
@@ -69,7 +77,7 @@ namespace BreweryAPI.Services
 
         public void RegisterUser(RegisterUserDto dto)
         {
-            var newUser = new Brewery()
+            var newUser = new UserAccount()
             {
                 Email = dto.Email,
                 Name = dto.Name,
@@ -80,23 +88,37 @@ namespace BreweryAPI.Services
             var hashedPassword = passwordHasher.HashPassword(newUser, dto.Password);
 
             newUser.PasswordHash = hashedPassword;
-            context.Breweries.Add(newUser);
+
+            switch (dto.RoleId)
+            {
+                case 0:
+                    context.Breweries.Add(newUser as Brewery);
+                    break;
+                case 1:
+                    context.Wholesalers.Add(newUser as Wholesaler);
+                    break;
+                case 2:
+                    context.Clients.Add(newUser as Client);
+                    break;
+                default:
+                    break;
+            }
             context.SaveChanges();
         }
 
 
         public void UpdateAccount(AccountUpdateDto dto)
         {
-            var brewery = context.Breweries.FirstOrDefault(x => x.Id == userContext.GetUserId);
+            var account = context.Breweries.FirstOrDefault(x => x.Id == userContext.GetUserId);
 
-            if (brewery == null)
+            if (account == null)
             {
                 //notFound
             }
 
-            brewery.Name = dto.Name;
-            brewery.Email = dto.Email;
-            brewery.Address = new Address()
+            account.Name = dto.Name;
+            account.Email = dto.Email;
+            account.Address = new Address()
             {
                 City = dto.City,
                 Street = dto.Street,
@@ -108,6 +130,7 @@ namespace BreweryAPI.Services
 
         public void DeleteAccount()
         {
+            //GetAccount Type and delete logged user
             var brewery = context.Breweries.FirstOrDefault(x => x.Id == userContext.GetUserId);
             
             if (brewery == null)
@@ -117,6 +140,23 @@ namespace BreweryAPI.Services
 
             context.Breweries.Remove(brewery);
             context.SaveChanges();
+        }
+
+        private UserAccount GetAccountType(LoginDto dto, AccType accountType)
+        {
+            switch (accountType)
+            {
+                case AccType.Brewery:
+                    return context.Breweries.Include(x => x.Role).FirstOrDefault(x => x.Email == dto.Email);
+                case AccType.Wholesaler:
+                    return context.Wholesalers.Include(x => x.Role).FirstOrDefault(x => x.Email == dto.Email);
+                case AccType.Client:
+                    return context.Clients.Include(x => x.Role).FirstOrDefault(x => x.Email == dto.Email);
+                default:
+                    break;
+            }
+
+            return null;
         }
     }
 }
