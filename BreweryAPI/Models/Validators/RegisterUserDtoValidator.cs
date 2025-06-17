@@ -6,7 +6,7 @@ namespace BreweryAPI.Models.Validators
 {
     public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
     {
-        public RegisterUserDtoValidator(BreweryContext dbContext)
+        public RegisterUserDtoValidator(dbContext dbContext)
         {
             RuleFor(x => x.Email).NotEmpty().EmailAddress();
 

@@ -31,6 +31,16 @@
         "tags": [
           "AccountRequest"
         ],
+        "parameters": [
+          {
+            "name": "accountType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/AccType"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -156,6 +166,116 @@
         }
       }
     },
+    "/wholesalers/{wholesalerId}": {
+      "get": {
+        "tags": [
+          "ClientRequests"
+        ],
+        "parameters": [
+          {
+            "name": "wholesalerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/wholesalers/{wholesalerId}/{beerId}": {
+      "get": {
+        "tags": [
+          "ClientRequests"
+        ],
+        "parameters": [
+          {
+            "name": "wholesalerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "beerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/wholesalers/{wholesalerId}/{beerId}/addBeer": {
+      "get": {
+        "tags": [
+          "ClientRequests"
+        ],
+        "parameters": [
+          {
+            "name": "wholesalerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "beerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/wholesalers/{wholesalerId}/quote": {
+      "get": {
+        "tags": [
+          "ClientRequests"
+        ],
+        "parameters": [
+          {
+            "name": "wholesalerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/wholesaler/addBeer/{id}": {
       "post": {
         "tags": [
@@ -182,6 +302,15 @@
   },
   "components": {
     "schemas": {
+      "AccType": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
       "AccountUpdateDto": {
         "type": "object",
         "properties": {

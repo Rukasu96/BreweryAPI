@@ -1,7 +1,6 @@
 ﻿namespace BreweryAPI.Entities
 {
-    public class Wholesaler : UserAccount
+    public class Wholesaler : CompanyAccount
     {
-        public List<Beer> Beers { get; set; }
     }
 }

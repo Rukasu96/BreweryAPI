@@ -40,7 +40,7 @@ builder.Services.AddAuthentication(option =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<BreweryContext>(
+builder.Services.AddDbContext<dbContext>(
         option => option.UseSqlServer(builder.Configuration.GetConnectionString("ConnString"))
     );
 
@@ -51,6 +51,7 @@ builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator
 builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddScoped<IBeerService, BreweryBeerService>();
 builder.Services.AddScoped<IWholesalerService, WholesalerService>();
+builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthorization();
@@ -72,4 +73,5 @@ app.UseHttpsRedirection();
 AccountRequest.RegisterEndpoints(app);
 BreweryBeerRequests.RegisterEndpoints(app);
 WholesalerRequests.RegisterEndpoints(app);
+ClientRequests.RegisterEndpoints(app);
 app.Run();

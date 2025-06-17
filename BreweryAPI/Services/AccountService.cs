@@ -27,13 +27,13 @@ namespace BreweryAPI.Services
 
     public class AccountService : IAccountService
     {
-        private readonly BreweryContext context;
+        private readonly dbContext context;
         private readonly IPasswordHasher<UserAccount> passwordHasher;
         private readonly IAuthorizationService authorizationService;
         private readonly AuthenticationSettings authenticationSettings;
         private readonly IUserContextService userContext;
 
-        public AccountService(BreweryContext context, IPasswordHasher<UserAccount> passwordHasher, AuthenticationSettings authenticationSettings, IAuthorizationService authorizationService, IUserContextService userContext)
+        public AccountService(dbContext context, IPasswordHasher<UserAccount> passwordHasher, AuthenticationSettings authenticationSettings, IAuthorizationService authorizationService, IUserContextService userContext)
         {
             this.context = context;
             this.passwordHasher = passwordHasher;
@@ -77,32 +77,45 @@ namespace BreweryAPI.Services
 
         public void RegisterUser(RegisterUserDto dto)
         {
-            var newUser = new UserAccount()
-            {
-                Email = dto.Email,
-                Name = dto.Name,
-                PhoneNumber = dto.PhoneNumber,
-                RoleId = dto.RoleId,
-            };
-
-            var hashedPassword = passwordHasher.HashPassword(newUser, dto.Password);
-
-            newUser.PasswordHash = hashedPassword;
+            UserAccount newUser = null;
 
             switch (dto.RoleId)
             {
-                case 0:
+                case 1:
+                    newUser = new Brewery()
+                    {
+                        Email = dto.Email,
+                        Name = dto.Name,
+                        PhoneNumber = dto.PhoneNumber,
+                        RoleId = dto.RoleId,
+                    };
                     context.Breweries.Add(newUser as Brewery);
                     break;
-                case 1:
+                case 2:
+                    newUser = new Wholesaler()
+                    {
+                        Email = dto.Email,
+                        Name = dto.Name,
+                        PhoneNumber = dto.PhoneNumber,
+                        RoleId = dto.RoleId,
+                    };
                     context.Wholesalers.Add(newUser as Wholesaler);
                     break;
-                case 2:
+                case 3:
+                    newUser = new Client()
+                    {
+                        Email = dto.Email,
+                        Name = dto.Name,
+                        PhoneNumber = dto.PhoneNumber,
+                        RoleId = dto.RoleId,
+                    };
                     context.Clients.Add(newUser as Client);
                     break;
-                default:
-                    break;
             }
+
+            var hashedPassword = passwordHasher.HashPassword(newUser, dto.Password);
+            newUser.PasswordHash = hashedPassword;
+
             context.SaveChanges();
         }
 

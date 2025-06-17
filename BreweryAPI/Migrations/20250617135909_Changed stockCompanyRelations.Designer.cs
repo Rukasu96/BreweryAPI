@@ -4,16 +4,19 @@ using BreweryAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace BreweryAPI.Migrations
 {
-    [DbContext(typeof(BreweryContext))]
-    partial class BreweryContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(dbContext))]
+    [Migration("20250617135909_Changed stockCompanyRelations")]
+    partial class ChangedstockCompanyRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,9 +59,18 @@ namespace BreweryAPI.Migrations
             modelBuilder.Entity("BreweryAPI.Entities.Beer", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BeerTypeId")
                         .HasColumnType("int");
 
                     b.Property<Guid>("BreweryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ClientId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("IBUPercentage")
@@ -72,13 +84,23 @@ namespace BreweryAPI.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(5,2)");
 
+                    b.Property<int>("StockId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("StrongValue")
                         .HasColumnType("decimal(3,1)")
                         .HasColumnName("Alc.");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BeerTypeId");
+
                     b.HasIndex("BreweryId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("StockId")
+                        .IsUnique();
 
                     b.ToTable("Beers");
                 });
@@ -113,31 +135,14 @@ namespace BreweryAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("BreweryAPI.Entities.BeerWholesaler", b =>
-                {
-                    b.Property<int>("BeerId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("WholesalerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("AddedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getutcdate()");
-
-                    b.HasKey("BeerId", "WholesalerId");
-
-                    b.HasIndex("WholesalerId");
-
-                    b.ToTable("BeerWholesalers");
-                });
-
-            modelBuilder.Entity("BreweryAPI.Entities.Brewery", b =>
+            modelBuilder.Entity("BreweryAPI.Entities.Client", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -159,9 +164,57 @@ namespace BreweryAPI.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AddressId");
+
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Breweries");
+                    b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("BreweryAPI.Entities.CompanyAccount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("varchar(12)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("stockId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("stockId")
+                        .IsUnique();
+
+                    b.ToTable("CompanyAccount");
+
+                    b.HasDiscriminator().HasValue("CompanyAccount");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("BreweryAPI.Entities.Role", b =>
@@ -199,40 +252,50 @@ namespace BreweryAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("BreweryAPI.Entities.Wholesaler", b =>
+            modelBuilder.Entity("BreweryAPI.Entities.Stock", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("AddressId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
+                    b.Property<int>("BeerId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("CompanyAccountId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("varchar(12)");
-
-                    b.Property<int>("RoleId")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.ToTable("Stocks");
+                });
+
+            modelBuilder.Entity("BreweryAPI.Entities.Brewery", b =>
+                {
+                    b.HasBaseType("BreweryAPI.Entities.CompanyAccount");
+
+                    b.HasDiscriminator().HasValue("Brewery");
+                });
+
+            modelBuilder.Entity("BreweryAPI.Entities.Wholesaler", b =>
+                {
+                    b.HasBaseType("BreweryAPI.Entities.CompanyAccount");
+
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BeerId")
+                        .HasColumnType("int");
+
                     b.HasIndex("AddressId");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("BeerId");
 
-                    b.ToTable("Wholesalers");
+                    b.HasDiscriminator().HasValue("Wholesaler");
                 });
 
             modelBuilder.Entity("BreweryAPI.Entities.Address", b =>
@@ -248,54 +311,36 @@ namespace BreweryAPI.Migrations
 
             modelBuilder.Entity("BreweryAPI.Entities.Beer", b =>
                 {
+                    b.HasOne("BreweryAPI.Entities.BeerType", "BeerType")
+                        .WithMany()
+                        .HasForeignKey("BeerTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BreweryAPI.Entities.Brewery", "Brewery")
-                        .WithMany("Beers")
+                        .WithMany()
                         .HasForeignKey("BreweryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BreweryAPI.Entities.BeerType", "Type")
+                    b.HasOne("BreweryAPI.Entities.Client", null)
                         .WithMany("Beers")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClientId");
 
-                    b.Navigation("Brewery");
-
-                    b.Navigation("Type");
-                });
-
-            modelBuilder.Entity("BreweryAPI.Entities.BeerWholesaler", b =>
-                {
-                    b.HasOne("BreweryAPI.Entities.Beer", "Beer")
-                        .WithMany()
-                        .HasForeignKey("BeerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BreweryAPI.Entities.Wholesaler", "Wholesaler")
-                        .WithMany()
-                        .HasForeignKey("WholesalerId")
+                    b.HasOne("BreweryAPI.Entities.Stock", "Stock")
+                        .WithOne("BeerInStock")
+                        .HasForeignKey("BreweryAPI.Entities.Beer", "StockId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
-                    b.Navigation("Beer");
+                    b.Navigation("BeerType");
 
-                    b.Navigation("Wholesaler");
+                    b.Navigation("Brewery");
+
+                    b.Navigation("Stock");
                 });
 
-            modelBuilder.Entity("BreweryAPI.Entities.Brewery", b =>
-                {
-                    b.HasOne("BreweryAPI.Entities.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("BreweryAPI.Entities.Wholesaler", b =>
+            modelBuilder.Entity("BreweryAPI.Entities.Client", b =>
                 {
                     b.HasOne("BreweryAPI.Entities.Address", "Address")
                         .WithMany()
@@ -312,16 +357,58 @@ namespace BreweryAPI.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("BreweryAPI.Entities.BeerType", b =>
+            modelBuilder.Entity("BreweryAPI.Entities.CompanyAccount", b =>
+                {
+                    b.HasOne("BreweryAPI.Entities.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BreweryAPI.Entities.Stock", "stock")
+                        .WithOne("CompanyAccount")
+                        .HasForeignKey("BreweryAPI.Entities.CompanyAccount", "stockId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("stock");
+                });
+
+            modelBuilder.Entity("BreweryAPI.Entities.Wholesaler", b =>
+                {
+                    b.HasOne("BreweryAPI.Entities.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
+                    b.HasOne("BreweryAPI.Entities.Beer", null)
+                        .WithMany("Wholesalers")
+                        .HasForeignKey("BeerId");
+
+                    b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("BreweryAPI.Entities.Beer", b =>
+                {
+                    b.Navigation("Wholesalers");
+                });
+
+            modelBuilder.Entity("BreweryAPI.Entities.Client", b =>
                 {
                     b.Navigation("Beers");
+                });
+
+            modelBuilder.Entity("BreweryAPI.Entities.Stock", b =>
+                {
+                    b.Navigation("BeerInStock");
+
+                    b.Navigation("CompanyAccount");
                 });
 
             modelBuilder.Entity("BreweryAPI.Entities.Brewery", b =>
                 {
                     b.Navigation("Address");
-
-                    b.Navigation("Beers");
                 });
 #pragma warning restore 612, 618
         }

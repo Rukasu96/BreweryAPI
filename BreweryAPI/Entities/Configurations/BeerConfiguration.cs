@@ -12,7 +12,7 @@ namespace BreweryAPI.Entities.Configurations
             builder.Property(x => x.StrongValue).HasColumnName("Alc.").HasColumnType("decimal(3,1)").IsRequired();
             builder.Property(x => x.Price).HasColumnType("decimal(5,2)").IsRequired();
 
-            builder.HasOne(x => x.Type).WithMany(x => x.Beers).HasForeignKey(x => x.Id);
+            builder.HasOne(x => x.BeerType);
         }
     }
 }

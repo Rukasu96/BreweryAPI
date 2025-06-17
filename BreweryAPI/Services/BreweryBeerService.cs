@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BreweryAPI.Entities;
 using BreweryAPI.Models.Beers;
+using Microsoft.EntityFrameworkCore;
 
 namespace BreweryAPI.Services
 {
@@ -14,10 +15,10 @@ namespace BreweryAPI.Services
 
     public class BreweryBeerService : IBeerService
     {
-        private readonly BreweryContext context;
+        private readonly dbContext context;
         private readonly IMapper mapper;
         private readonly IUserContextService userContext;
-        public BreweryBeerService(BreweryContext context, IMapper mapper, IUserContextService userContext)
+        public BreweryBeerService(dbContext context, IMapper mapper, IUserContextService userContext)
         {
             this.context = context;
             this.mapper = mapper;
@@ -27,20 +28,42 @@ namespace BreweryAPI.Services
         public void CreateBeer(CreatedBeerDto dto)
         {
             var beer = mapper.Map<Beer>(dto);
-            var brewery = context.Breweries.First(x => x.Id == userContext.GetUserId);
 
-            beer.BreweryId = brewery.Id;
-            beer.Brewery = brewery;
+            beer.BreweryId = userContext.GetUserId;
 
-            var type = context.BeerTypes.FirstOrDefault(x => x.Id == dto.BeerTypeId);
-            beer.Type = type;
-
-            if(beer.Id == 0)
+            if (context.Stocks.Any())
             {
-                beer.Id = 1;
+                var beerInStock = context.Stocks.Where(x => x.CompanyAccountId == userContext.GetUserId).FirstOrDefault(x => x.BeerInStock.Name == beer.Name);
+
+                if (beerInStock == null)
+                {
+                    beer.Stock = new Stock()
+                    {
+                        BeerInStock = beer,
+                        Quantity = 1,
+                        CompanyAccountId = userContext.GetUserId
+                    };
+                    context.Stocks.Add(beer.Stock);
+                    context.Beers.Add(beer);
+                }
+                else
+                {
+                    beerInStock.Quantity++;
+                }
+            }
+            else
+            {
+                beer.Stock = new Stock()
+                {
+                    BeerInStock = beer,
+                    Quantity = 1,
+                    CompanyAccountId = userContext.GetUserId
+                };
+                context.Stocks.Add(beer.Stock);
+                context.Beers.Add(beer);
+
             }
 
-            context.Beers.Add(beer);
             context.SaveChanges();
         }
 

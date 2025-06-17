@@ -98,6 +98,11 @@
         "Name": "dto",
         "Type": "BreweryAPI.Models.Account.LoginDto",
         "IsRequired": false
+      },
+      {
+        "Name": "accountType",
+        "Type": "BreweryAPI.Services.AccType",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": [
@@ -163,6 +168,104 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "BreweryAPI.Requests.ClientRequests",
+    "Method": "GetAllWholesalersBeers",
+    "RelativePath": "wholesalers/{wholesalerId}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "wholesalerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "BreweryAPI.Requests.ClientRequests",
+    "Method": "GetWholesalerBeer",
+    "RelativePath": "wholesalers/{wholesalerId}/{beerId}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "wholesalerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "beerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "BreweryAPI.Requests.ClientRequests",
+    "Method": "AddBeer",
+    "RelativePath": "wholesalers/{wholesalerId}/{beerId}/addBeer",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "wholesalerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "beerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "BreweryAPI.Requests.ClientRequests",
+    "Method": "GetQuote",
+    "RelativePath": "wholesalers/{wholesalerId}/quote",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "wholesalerId",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],

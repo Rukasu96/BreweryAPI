@@ -6,14 +6,15 @@ namespace BreweryAPI.Services
     {
         void AddBeer(Beer beer);
         void RemoveBeer(Beer beer);
+        string SendQuote(List<Beer> clientBeers);
     }
 
     public class WholesalerService : IWholesalerService
     {
-        private readonly BreweryContext context;
+        private readonly dbContext context;
         private readonly IUserContextService userContext;
 
-        public WholesalerService(BreweryContext context, IUserContextService userContext)
+        public WholesalerService(dbContext context, IUserContextService userContext)
         {
             this.context = context;
             this.userContext = userContext;
@@ -22,13 +23,37 @@ namespace BreweryAPI.Services
         public void AddBeer(Beer beer) 
         {
             var wholesaler = context.Wholesalers.FirstOrDefault(x => x.Id == userContext.GetUserId);
-            wholesaler.Beers.Add(beer);
+            //wholesaler.Beers.Add(beer);
+            context.SaveChanges();
         }
 
         public void RemoveBeer(Beer beer)
         {
             var wholesaler = context.Wholesalers.FirstOrDefault(x => x.Id == userContext.GetUserId);
-            wholesaler.Beers.Remove(beer);
+            //wholesaler.Beers.Remove(beer);
+            context.SaveChanges();
+        }
+
+        public string SendQuote(List<Beer> clientBeers)
+        {
+            decimal finalPrice = 0;
+            decimal discount = 1;
+            if(clientBeers.Count > 10)
+            {
+                discount = 0.1m;
+            }else if(clientBeers.Count > 20)
+            {
+                discount = 0.2m;
+            }
+
+            foreach (var beer in clientBeers)
+            {
+                finalPrice += beer.Price;
+            }
+
+            finalPrice *= discount;
+
+            return $"Your quote: {finalPrice}$";
         }
     }
 }

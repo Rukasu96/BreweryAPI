@@ -2,9 +2,9 @@
 
 namespace BreweryAPI.Entities
 {
-    public class BreweryContext : DbContext
+    public class dbContext : DbContext
     {
-        public BreweryContext(DbContextOptions<BreweryContext> options) : base(options)
+        public dbContext(DbContextOptions<dbContext> options) : base(options)
         {
             
         }
@@ -15,8 +15,8 @@ namespace BreweryAPI.Entities
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Wholesaler> Wholesalers { get; set; }
-        public DbSet<BeerWholesaler> BeerWholesalers { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<Stock> Stocks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,7 +1,6 @@
 ﻿namespace BreweryAPI.Entities
 {
-    public class Brewery : UserAccount
+    public class Brewery : CompanyAccount
     {
-        public List<Beer> Beers { get; set; } = new List<Beer>();
     }
 }
