@@ -4,6 +4,7 @@ using BreweryAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BreweryAPI.Migrations
 {
     [DbContext(typeof(dbContext))]
-    partial class dbContextModelSnapshot : ModelSnapshot
+    [Migration("20250618113211_Cascade deleting in stock configuration")]
+    partial class Cascadedeletinginstockconfiguration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,7 @@ namespace BreweryAPI.Migrations
                     b.HasIndex("BreweryId")
                         .IsUnique();
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("BreweryAPI.Entities.Beer", b =>
@@ -99,7 +102,7 @@ namespace BreweryAPI.Migrations
                     b.HasIndex("StockId")
                         .IsUnique();
 
-                    b.ToTable("Beers", (string)null);
+                    b.ToTable("Beers");
                 });
 
             modelBuilder.Entity("BreweryAPI.Entities.BeerType", b =>
@@ -117,7 +120,7 @@ namespace BreweryAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BeerTypes", (string)null);
+                    b.ToTable("BeerTypes");
 
                     b.HasData(
                         new
@@ -165,7 +168,7 @@ namespace BreweryAPI.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Clients", (string)null);
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("BreweryAPI.Entities.CompanyAccount", b =>
@@ -201,7 +204,7 @@ namespace BreweryAPI.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("CompanyAccount", (string)null);
+                    b.ToTable("CompanyAccount");
 
                     b.HasDiscriminator().HasValue("CompanyAccount");
 
@@ -223,7 +226,7 @@ namespace BreweryAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
@@ -264,7 +267,7 @@ namespace BreweryAPI.Migrations
 
                     b.HasIndex("CompanyAccountId");
 
-                    b.ToTable("Stocks", (string)null);
+                    b.ToTable("Stocks");
                 });
 
             modelBuilder.Entity("BreweryAPI.Entities.Brewery", b =>

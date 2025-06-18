@@ -144,14 +144,14 @@ namespace BreweryAPI.Services
         public void DeleteAccount()
         {
             //GetAccount Type and delete logged user
-            var brewery = context.Breweries.FirstOrDefault(x => x.Id == userContext.GetUserId);
+            var account = context.Breweries.Include(x => x.Stocks).FirstOrDefault(x => x.Id == userContext.GetUserId);
             
-            if (brewery == null)
+            if (account == null)
             {
                 //notFound
             }
 
-            context.Breweries.Remove(brewery);
+            context.Breweries.Remove(account);
             context.SaveChanges();
         }
 

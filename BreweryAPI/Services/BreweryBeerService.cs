@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BreweryAPI.Entities;
 using BreweryAPI.Models.Beers;
-using Microsoft.EntityFrameworkCore;
 
 namespace BreweryAPI.Services
 {
@@ -41,7 +40,8 @@ namespace BreweryAPI.Services
                     {
                         BeerInStock = beer,
                         Quantity = 1,
-                        CompanyAccountId = userContext.GetUserId
+                        CompanyAccountId = userContext.GetUserId,
+                        BeerId = beer.Id
                     };
                     context.Stocks.Add(beer.Stock);
                     context.Beers.Add(beer);
@@ -57,7 +57,8 @@ namespace BreweryAPI.Services
                 {
                     BeerInStock = beer,
                     Quantity = 1,
-                    CompanyAccountId = userContext.GetUserId
+                    CompanyAccountId = userContext.GetUserId,
+                    BeerId = beer.Id
                 };
                 context.Stocks.Add(beer.Stock);
                 context.Beers.Add(beer);

@@ -23,14 +23,44 @@ namespace BreweryAPI.Services
         public void AddBeer(Beer beer) 
         {
             var wholesaler = context.Wholesalers.FirstOrDefault(x => x.Id == userContext.GetUserId);
-            //wholesaler.Beers.Add(beer);
+
+            if (context.Stocks.Any()) 
+            {
+                var beerStock = context.Stocks.Where(x => x.CompanyAccountId == beer.BreweryId).FirstOrDefault(x => x.BeerInStock.Name == beer.Name);
+
+
+                if (beerStock != null)
+                {
+                    var wholeSalerStock = context.Stocks.Where(x => x.CompanyAccountId == userContext.GetUserId).FirstOrDefault(x => x.BeerInStock.Name == beer.Name);
+                    
+                    if(wholeSalerStock != null)
+                    {
+                        wholeSalerStock.Quantity++;
+                    }
+                    else
+                    {
+                        var newStock = new Stock()
+                        {
+                            BeerInStock = beer,
+                            Quantity = 1,
+                            CompanyAccountId = userContext.GetUserId,
+                            BeerId = beer.Id
+                        };
+                        context.Stocks.Add(newStock);
+                    }
+                }
+                else
+                {
+                    //Error
+                }
+            }
+
             context.SaveChanges();
         }
 
         public void RemoveBeer(Beer beer)
         {
             var wholesaler = context.Wholesalers.FirstOrDefault(x => x.Id == userContext.GetUserId);
-            //wholesaler.Beers.Remove(beer);
             context.SaveChanges();
         }
 
