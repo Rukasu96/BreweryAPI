@@ -1,4 +1,5 @@
-﻿using BreweryAPI.Entities;
+﻿using AutoMapper;
+using BreweryAPI.Entities;
 
 namespace BreweryAPI.Services
 {
@@ -13,11 +14,13 @@ namespace BreweryAPI.Services
     {
         private readonly dbContext context;
         private readonly IUserContextService userContext;
+        private readonly IMapper mapper;
 
-        public WholesalerService(dbContext context, IUserContextService userContext)
+        public WholesalerService(dbContext context, IUserContextService userContext, IMapper mapper)
         {
             this.context = context;
             this.userContext = userContext;
+            this.mapper = mapper;
         }
 
         public void AddBeer(Beer beer) 
@@ -28,23 +31,25 @@ namespace BreweryAPI.Services
             {
                 var beerStock = context.Stocks.Where(x => x.CompanyAccountId == beer.BreweryId).FirstOrDefault(x => x.BeerInStock.Name == beer.Name);
 
-
-                if (beerStock != null)
+                if (beerStock != null || beerStock.Quantity == 0)
                 {
                     var wholeSalerStock = context.Stocks.Where(x => x.CompanyAccountId == userContext.GetUserId).FirstOrDefault(x => x.BeerInStock.Name == beer.Name);
-                    
-                    if(wholeSalerStock != null)
+                    beerStock.Quantity--;
+
+                    if (wholeSalerStock != null)
                     {
                         wholeSalerStock.Quantity++;
                     }
                     else
                     {
+                        var newBeer = mapper.Map<Beer>(beer);
+
                         var newStock = new Stock()
                         {
-                            BeerInStock = beer,
+                            BeerInStock = newBeer,
                             Quantity = 1,
                             CompanyAccountId = userContext.GetUserId,
-                            BeerId = beer.Id
+                            BeerId = newBeer.Id
                         };
                         context.Stocks.Add(newStock);
                     }

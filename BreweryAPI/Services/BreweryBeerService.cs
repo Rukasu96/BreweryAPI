@@ -36,14 +36,14 @@ namespace BreweryAPI.Services
 
                 if (beerInStock == null)
                 {
-                    beer.Stock = new Stock()
+                    var newStock = new Stock()
                     {
                         BeerInStock = beer,
                         Quantity = 1,
                         CompanyAccountId = userContext.GetUserId,
                         BeerId = beer.Id
                     };
-                    context.Stocks.Add(beer.Stock);
+                    context.Stocks.Add(newStock);
                     context.Beers.Add(beer);
                 }
                 else
@@ -53,14 +53,14 @@ namespace BreweryAPI.Services
             }
             else
             {
-                beer.Stock = new Stock()
+                var newStock = new Stock()
                 {
                     BeerInStock = beer,
                     Quantity = 1,
                     CompanyAccountId = userContext.GetUserId,
                     BeerId = beer.Id
                 };
-                context.Stocks.Add(beer.Stock);
+                context.Stocks.Add(newStock);
                 context.Beers.Add(beer);
 
             }
