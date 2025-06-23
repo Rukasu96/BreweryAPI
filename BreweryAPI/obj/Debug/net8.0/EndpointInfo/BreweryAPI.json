@@ -166,76 +166,12 @@
         }
       }
     },
-    "/wholesalers/{wholesalerId}": {
-      "get": {
+    "/wholesalers/wholesaler/{beerId}/addBeer": {
+      "post": {
         "tags": [
           "ClientRequests"
         ],
         "parameters": [
-          {
-            "name": "wholesalerId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/wholesalers/{wholesalerId}/{beerId}": {
-      "get": {
-        "tags": [
-          "ClientRequests"
-        ],
-        "parameters": [
-          {
-            "name": "wholesalerId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "beerId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/wholesalers/{wholesalerId}/{beerId}/addBeer": {
-      "get": {
-        "tags": [
-          "ClientRequests"
-        ],
-        "parameters": [
-          {
-            "name": "wholesalerId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
           {
             "name": "beerId",
             "in": "path",
@@ -276,14 +212,37 @@
         }
       }
     },
-    "/wholesaler/addBeer/{id}": {
+    "/wholesaler/addBeer/{beerId}": {
       "post": {
         "tags": [
           "WholesalerRequests"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "beerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/wholesaler/removeBeer/{beerId}": {
+      "delete": {
+        "tags": [
+          "WholesalerRequests"
+        ],
+        "parameters": [
+          {
+            "name": "beerId",
             "in": "path",
             "required": true,
             "schema": {

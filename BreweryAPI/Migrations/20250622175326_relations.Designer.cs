@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BreweryAPI.Migrations
 {
     [DbContext(typeof(dbContext))]
-    [Migration("20250619104351_Changed StockBeersRelations")]
-    partial class ChangedStockBeersRelations
+    [Migration("20250622175326_relations")]
+    partial class relations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,9 +70,6 @@ namespace BreweryAPI.Migrations
                     b.Property<Guid>("BreweryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ClientId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("IBUPercentage")
                         .HasColumnType("int")
                         .HasColumnName("IBU");
@@ -96,8 +93,6 @@ namespace BreweryAPI.Migrations
                     b.HasIndex("BeerTypeId");
 
                     b.HasIndex("BreweryId");
-
-                    b.HasIndex("ClientId");
 
                     b.ToTable("Beers");
                 });
@@ -157,6 +152,9 @@ namespace BreweryAPI.Migrations
                         .HasColumnType("varchar(12)");
 
                     b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShopBasketId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -243,6 +241,29 @@ namespace BreweryAPI.Migrations
                         });
                 });
 
+            modelBuilder.Entity("BreweryAPI.Entities.ShopBasket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WholesalerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("WholesalerId");
+
+                    b.ToTable("ShopBaskets");
+                });
+
             modelBuilder.Entity("BreweryAPI.Entities.Stock", b =>
                 {
                     b.Property<int>("Id")
@@ -260,11 +281,16 @@ namespace BreweryAPI.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("ShopBasketId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BeerId");
 
                     b.HasIndex("CompanyAccountId");
+
+                    b.HasIndex("ShopBasketId");
 
                     b.ToTable("Stocks");
                 });
@@ -298,7 +324,7 @@ namespace BreweryAPI.Migrations
                     b.HasOne("BreweryAPI.Entities.Brewery", "Brewery")
                         .WithOne("Address")
                         .HasForeignKey("BreweryAPI.Entities.Address", "BreweryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Brewery");
@@ -317,10 +343,6 @@ namespace BreweryAPI.Migrations
                         .HasForeignKey("BreweryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("BreweryAPI.Entities.Client", null)
-                        .WithMany("Beers")
-                        .HasForeignKey("ClientId");
 
                     b.Navigation("BeerType");
 
@@ -355,23 +377,50 @@ namespace BreweryAPI.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("BreweryAPI.Entities.ShopBasket", b =>
+                {
+                    b.HasOne("BreweryAPI.Entities.Client", "Client")
+                        .WithMany("ShopBaskets")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BreweryAPI.Entities.Wholesaler", "Wholesaler")
+                        .WithMany("ShopBaskets")
+                        .HasForeignKey("WholesalerId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Wholesaler");
+                });
+
             modelBuilder.Entity("BreweryAPI.Entities.Stock", b =>
                 {
                     b.HasOne("BreweryAPI.Entities.Beer", "BeerInStock")
                         .WithMany("Stocks")
                         .HasForeignKey("BeerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("BreweryAPI.Entities.CompanyAccount", "CompanyAccount")
                         .WithMany("Stocks")
                         .HasForeignKey("CompanyAccountId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("BreweryAPI.Entities.ShopBasket", "ShopBasket")
+                        .WithMany("Stocks")
+                        .HasForeignKey("ShopBasketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("BeerInStock");
 
                     b.Navigation("CompanyAccount");
+
+                    b.Navigation("ShopBasket");
                 });
 
             modelBuilder.Entity("BreweryAPI.Entities.Wholesaler", b =>
@@ -396,7 +445,7 @@ namespace BreweryAPI.Migrations
 
             modelBuilder.Entity("BreweryAPI.Entities.Client", b =>
                 {
-                    b.Navigation("Beers");
+                    b.Navigation("ShopBaskets");
                 });
 
             modelBuilder.Entity("BreweryAPI.Entities.CompanyAccount", b =>
@@ -404,9 +453,19 @@ namespace BreweryAPI.Migrations
                     b.Navigation("Stocks");
                 });
 
+            modelBuilder.Entity("BreweryAPI.Entities.ShopBasket", b =>
+                {
+                    b.Navigation("Stocks");
+                });
+
             modelBuilder.Entity("BreweryAPI.Entities.Brewery", b =>
                 {
                     b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("BreweryAPI.Entities.Wholesaler", b =>
+                {
+                    b.Navigation("ShopBaskets");
                 });
 #pragma warning restore 612, 618
         }

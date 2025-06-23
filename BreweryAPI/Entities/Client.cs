@@ -2,6 +2,7 @@
 {
     public class Client : UserAccount
     {
-        public List<Beer> Beers { get; set; }
+        public List<ShopBasket> ShopBaskets { get; set; }
+        public int ShopBasketId { get; set; }
     }
 }

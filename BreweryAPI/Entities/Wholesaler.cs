@@ -2,5 +2,6 @@
 {
     public class Wholesaler : CompanyAccount
     {
+        public List<ShopBasket> ShopBaskets { get; set; }
     }
 }

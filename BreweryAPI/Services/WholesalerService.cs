@@ -6,8 +6,8 @@ namespace BreweryAPI.Services
     public interface IWholesalerService
     {
         void AddBeer(Beer beer);
-        void RemoveBeer(Beer beer);
-        string SendQuote(List<Beer> clientBeers);
+        void RemoveBeer(int beerId);
+        string SendQuote(List<ShopBasket> clientShopBaskets);
     }
 
     public class WholesalerService : IWholesalerService
@@ -31,7 +31,7 @@ namespace BreweryAPI.Services
             {
                 var beerStock = context.Stocks.Where(x => x.CompanyAccountId == beer.BreweryId).FirstOrDefault(x => x.BeerInStock.Name == beer.Name);
 
-                if (beerStock != null || beerStock.Quantity == 0)
+                if (beerStock != null)
                 {
                     var wholeSalerStock = context.Stocks.Where(x => x.CompanyAccountId == userContext.GetUserId).FirstOrDefault(x => x.BeerInStock.Name == beer.Name);
                     beerStock.Quantity--;
@@ -63,27 +63,47 @@ namespace BreweryAPI.Services
             context.SaveChanges();
         }
 
-        public void RemoveBeer(Beer beer)
+        public void RemoveBeer(int beerId)
         {
             var wholesaler = context.Wholesalers.FirstOrDefault(x => x.Id == userContext.GetUserId);
+            var beer = context.Beers.FirstOrDefault(x => x.Id == beerId);
+
+            if (wholesaler.Stocks.Any())
+            {
+                var beerStock = wholesaler.Stocks.First(x => x.BeerInStock.Name == beer.Name);
+
+                if (beerStock.Quantity > 0)
+                {
+                    beerStock.Quantity--;
+                }
+                else
+                {
+                    context.Stocks.Remove(beerStock);
+                }
+            }
+
             context.SaveChanges();
         }
 
-        public string SendQuote(List<Beer> clientBeers)
+        public string SendQuote(List<ShopBasket> clientShopBaskets)
         {
+            int finalQuantity = 0;
             decimal finalPrice = 0;
             decimal discount = 1;
-            if(clientBeers.Count > 10)
+
+            foreach (var basket in clientShopBaskets)
             {
-                discount = 0.1m;
-            }else if(clientBeers.Count > 20)
-            {
-                discount = 0.2m;
+                var beerPrice = context.Beers.First(x => x.Id == basket.BeerId).Price;
+                finalQuantity += basket.Quantity;
+                finalPrice += beerPrice * basket.Quantity;
             }
 
-            foreach (var beer in clientBeers)
+            if(finalQuantity > 10)
             {
-                finalPrice += beer.Price;
+                discount = 0.1m;
+            }else if(finalQuantity > 20)
+            {
+                discount = 0.2m;
             }
 
             finalPrice *= discount;

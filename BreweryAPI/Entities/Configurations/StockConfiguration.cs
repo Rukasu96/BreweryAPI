@@ -7,8 +7,8 @@ namespace BreweryAPI.Entities.Configurations
     {
         public void Configure(EntityTypeBuilder<Stock> builder)
         {
-            builder.HasOne(x => x.BeerInStock).WithMany(x => x.Stocks).HasForeignKey(x => x.BeerId).OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(x => x.CompanyAccount).WithMany(x => x.Stocks).HasForeignKey(x => x.CompanyAccountId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(x => x.BeerInStock).WithMany(x => x.Stocks).HasForeignKey(x => x.BeerId).OnDelete(DeleteBehavior.ClientCascade);
+            builder.HasOne(x => x.CompanyAccount).WithMany(x => x.Stocks).HasForeignKey(x => x.CompanyAccountId).OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

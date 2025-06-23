@@ -13,6 +13,7 @@
         public Guid BreweryId { get; set; }
         public List<Wholesaler> Wholesalers { get; set; }
         public List<Stock> Stocks { get; set; }
+        public List<ShopBasket> shopBaskets { get; set; }
         public int StockId { get; set; } 
     }
 }

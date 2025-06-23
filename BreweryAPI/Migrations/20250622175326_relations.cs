@@ -5,38 +5,37 @@
 namespace BreweryAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Cascadedeletinginstockconfiguration : Migration
+    public partial class relations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Stocks_CompanyAccount_CompanyAccountId",
+                name: "FK_Stocks_ShopBaskets_ShopBasketId",
                 table: "Stocks");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Stocks_CompanyAccount_CompanyAccountId",
+                name: "FK_Stocks_ShopBaskets_ShopBasketId",
                 table: "Stocks",
-                column: "CompanyAccountId",
-                principalTable: "CompanyAccount",
+                column: "ShopBasketId",
+                principalTable: "ShopBaskets",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.NoAction);
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Stocks_CompanyAccount_CompanyAccountId",
+                name: "FK_Stocks_ShopBaskets_ShopBasketId",
                 table: "Stocks");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Stocks_CompanyAccount_CompanyAccountId",
+                name: "FK_Stocks_ShopBaskets_ShopBasketId",
                 table: "Stocks",
-                column: "CompanyAccountId",
-                principalTable: "CompanyAccount",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                column: "ShopBasketId",
+                principalTable: "ShopBaskets",
+                principalColumn: "Id");
         }
     }
 }

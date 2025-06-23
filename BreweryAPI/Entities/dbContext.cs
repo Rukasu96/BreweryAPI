@@ -17,6 +17,7 @@ namespace BreweryAPI.Entities
         public DbSet<Wholesaler> Wholesalers { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Stock> Stocks { get; set; }
+        public DbSet<ShopBasket> ShopBaskets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BreweryAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangedstockCompanyRelations : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,21 +40,6 @@ namespace BreweryAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Stocks",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BeerId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    CompanyAccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Stocks", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Addresses",
                 columns: table => new
                 {
@@ -75,6 +60,7 @@ namespace BreweryAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ShopBasketId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "varchar(50)", nullable: false),
                     Email = table.Column<string>(type: "varchar(50)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "varchar(12)", nullable: false),
@@ -110,8 +96,7 @@ namespace BreweryAPI.Migrations
                     Alc = table.Column<decimal>(name: "Alc.", type: "decimal(3,1)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
                     BreweryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StockId = table.Column<int>(type: "int", nullable: false),
-                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    StockId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -122,16 +107,6 @@ namespace BreweryAPI.Migrations
                         principalTable: "BeerTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Beers_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Beers_Stocks_StockId",
-                        column: x => x.StockId,
-                        principalTable: "Stocks",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -139,7 +114,6 @@ namespace BreweryAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    stockId = table.Column<int>(type: "int", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
                     BeerId = table.Column<int>(type: "int", nullable: true),
                     AddressId = table.Column<int>(type: "int", nullable: true),
@@ -168,10 +142,61 @@ namespace BreweryAPI.Migrations
                         principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShopBaskets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WholesalerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShopBaskets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CompanyAccount_Stocks_stockId",
-                        column: x => x.stockId,
-                        principalTable: "Stocks",
+                        name: "FK_ShopBaskets_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ShopBaskets_CompanyAccount_WholesalerId",
+                        column: x => x.WholesalerId,
+                        principalTable: "CompanyAccount",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Stocks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BeerId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    CompanyAccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ShopBasketId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Stocks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Stocks_Beers_BeerId",
+                        column: x => x.BeerId,
+                        principalTable: "Beers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Stocks_CompanyAccount_CompanyAccountId",
+                        column: x => x.CompanyAccountId,
+                        principalTable: "CompanyAccount",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Stocks_ShopBaskets_ShopBasketId",
+                        column: x => x.ShopBasketId,
+                        principalTable: "ShopBaskets",
                         principalColumn: "Id");
                 });
 
@@ -211,17 +236,6 @@ namespace BreweryAPI.Migrations
                 column: "BreweryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Beers_ClientId",
-                table: "Beers",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Beers_StockId",
-                table: "Beers",
-                column: "StockId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Clients_AddressId",
                 table: "Clients",
                 column: "AddressId");
@@ -247,18 +261,36 @@ namespace BreweryAPI.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CompanyAccount_stockId",
-                table: "CompanyAccount",
-                column: "stockId",
-                unique: true);
+                name: "IX_ShopBaskets_ClientId",
+                table: "ShopBaskets",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShopBaskets_WholesalerId",
+                table: "ShopBaskets",
+                column: "WholesalerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stocks_BeerId",
+                table: "Stocks",
+                column: "BeerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stocks_CompanyAccountId",
+                table: "Stocks",
+                column: "CompanyAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stocks_ShopBasketId",
+                table: "Stocks",
+                column: "ShopBasketId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Addresses_CompanyAccount_BreweryId",
                 table: "Addresses",
                 column: "BreweryId",
                 principalTable: "CompanyAccount",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Beers_CompanyAccount_BreweryId",
@@ -281,25 +313,28 @@ namespace BreweryAPI.Migrations
                 table: "Beers");
 
             migrationBuilder.DropTable(
-                name: "CompanyAccount");
+                name: "Stocks");
 
             migrationBuilder.DropTable(
-                name: "Beers");
-
-            migrationBuilder.DropTable(
-                name: "BeerTypes");
+                name: "ShopBaskets");
 
             migrationBuilder.DropTable(
                 name: "Clients");
 
             migrationBuilder.DropTable(
-                name: "Stocks");
+                name: "CompanyAccount");
 
             migrationBuilder.DropTable(
                 name: "Addresses");
 
             migrationBuilder.DropTable(
+                name: "Beers");
+
+            migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "BeerTypes");
         }
     }
 }

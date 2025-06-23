@@ -1,4 +1,6 @@
-﻿namespace BreweryAPI.Entities
+﻿using BreweryAPI.Entities.Configurations;
+
+namespace BreweryAPI.Entities
 {
     public class CompanyAccount : UserAccount
     {
