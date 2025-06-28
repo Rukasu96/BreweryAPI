@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BreweryAPI.Entities;
+using BreweryAPI.Exceptions;
 using BreweryAPI.Models.Beers;
 
 namespace BreweryAPI.Services
@@ -12,12 +13,13 @@ namespace BreweryAPI.Services
         Beer GetById(int id);
     }
 
-    public class BreweryBeerService : IBeerService
+    public class BeerService : IBeerService
     {
         private readonly dbContext context;
         private readonly IMapper mapper;
         private readonly IUserContextService userContext;
-        public BreweryBeerService(dbContext context, IMapper mapper, IUserContextService userContext)
+
+        public BeerService(dbContext context, IMapper mapper, IUserContextService userContext)
         {
             this.context = context;
             this.mapper = mapper;
@@ -62,7 +64,6 @@ namespace BreweryAPI.Services
                 };
                 context.Stocks.Add(newStock);
                 context.Beers.Add(beer);
-
             }
 
             context.SaveChanges();
@@ -78,7 +79,14 @@ namespace BreweryAPI.Services
 
         public Beer GetById(int id)
         {
-            return context.Beers.FirstOrDefault(x => x.Id == id);
+            var beer = context.Beers.FirstOrDefault(x => x.Id == id);
+
+            if (beer == null)
+            {
+                throw new NotFoundException("Beer not found");
+            }
+
+            return beer;
         }
 
         public void UpdateBeer(BeerUpdateDto dto, int id)

@@ -1,4 +1,5 @@
 ﻿using BreweryAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BreweryAPI.Requests
@@ -7,17 +8,19 @@ namespace BreweryAPI.Requests
     {
         public static void RegisterEndpoints(WebApplication app)
         {
-            app.MapPost("/wholesalers/wholesaler/{beerId}/addBeer", ClientRequests.AddBeer);
-            app.MapGet("/wholesalers/{wholesalerId}/quote", ClientRequests.GetQuote);
+            app.MapPost("/client/wholesaler/{beerId}/addBeer", ClientRequests.AddBeer);
+            app.MapGet("/client/{wholesalerId}/quote", ClientRequests.GetQuote);
         }
 
-        public static IResult AddBeer(IBeerService beerService, IClientService clientService, int beerId)
+        [Authorize(Roles = "Client")]
+        public static IResult AddBeer(IBeerService beerService, IClientService clientService, [FromRoute] int beerId)
         {
             var beer = beerService.GetById(beerId);
             clientService.AddBeerToBasket(beer);
             return Results.Ok();
         }
 
+        [Authorize(Roles = "Client")]
         public static IResult GetQuote(IClientService clientService,IWholesalerService wholesalerService, [FromRoute] Guid wholesalerId)
         {
             var clientBaskets = clientService.GetBaskets(wholesalerId);

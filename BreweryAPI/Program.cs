@@ -1,4 +1,5 @@
 using BreweryAPI;
+using BreweryAPI.Authentication;
 using BreweryAPI.Entities;
 using BreweryAPI.Models.Account;
 using BreweryAPI.Models.Validators;
@@ -7,7 +8,6 @@ using BreweryAPI.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -15,27 +15,7 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var authenticationSettings = new AuthenticationSettings();
-
-builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
-
-builder.Services.AddSingleton(authenticationSettings);
-builder.Services.AddAuthentication(option =>
-{
-    option.DefaultAuthenticateScheme = "Bearer";
-    option.DefaultScheme = "Bearer";
-    option.DefaultChallengeScheme = "Bearer";
-}).AddJwtBearer(cfg =>
-{
-    cfg.RequireHttpsMetadata = false;
-    cfg.SaveToken = true;
-    cfg.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidIssuer = authenticationSettings.JwtIssuer,
-        ValidAudience = authenticationSettings.JwtIssuer,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
-    };
-});
+AuthenticationConfiguration.SetAuthentication(builder);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -50,7 +30,7 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPasswordHasher<UserAccount>, PasswordHasher<UserAccount>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
-builder.Services.AddScoped<IBeerService, BreweryBeerService>();
+builder.Services.AddScoped<IBeerService, BeerService>();
 builder.Services.AddScoped<IWholesalerService, WholesalerService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddHttpContextAccessor();
@@ -71,8 +51,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-AccountRequest.RegisterEndpoints(app);
-BreweryBeerRequests.RegisterEndpoints(app);
+AccountRequests.RegisterEndpoints(app);
+BeerRequests.RegisterEndpoints(app);
 WholesalerRequests.RegisterEndpoints(app);
 ClientRequests.RegisterEndpoints(app);
 app.Run();

@@ -1,4 +1,4 @@
-﻿namespace BreweryAPI
+﻿namespace BreweryAPI.Authentication
 {
     public class AuthenticationSettings
     {

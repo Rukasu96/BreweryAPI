@@ -8,7 +8,7 @@
     "/register": {
       "post": {
         "tags": [
-          "AccountRequest"
+          "AccountRequests"
         ],
         "requestBody": {
           "content": {
@@ -29,7 +29,7 @@
     "/login": {
       "post": {
         "tags": [
-          "AccountRequest"
+          "AccountRequests"
         ],
         "parameters": [
           {
@@ -60,7 +60,7 @@
     "/update": {
       "put": {
         "tags": [
-          "AccountRequest"
+          "AccountRequests"
         ],
         "requestBody": {
           "content": {
@@ -81,7 +81,7 @@
     "/delete": {
       "delete": {
         "tags": [
-          "AccountRequest"
+          "AccountRequests"
         ],
         "responses": {
           "200": {
@@ -90,10 +90,10 @@
         }
       }
     },
-    "/brewery/beers/create": {
+    "/brewery/createBear": {
       "post": {
         "tags": [
-          "BreweryBeerRequests"
+          "BeerRequests"
         ],
         "requestBody": {
           "content": {
@@ -111,14 +111,14 @@
         }
       }
     },
-    "/brewery/beers/{id}/update": {
+    "/brewery/beers/{beerId}/update": {
       "put": {
         "tags": [
-          "BreweryBeerRequests"
+          "BeerRequests"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "beerId",
             "in": "path",
             "required": true,
             "schema": {
@@ -143,14 +143,14 @@
         }
       }
     },
-    "/brewery/beers/{id}/delete": {
+    "/brewery/beers/{beerId}/delete": {
       "delete": {
         "tags": [
-          "BreweryBeerRequests"
+          "BeerRequests"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "beerId",
             "in": "path",
             "required": true,
             "schema": {
@@ -166,7 +166,7 @@
         }
       }
     },
-    "/wholesalers/wholesaler/{beerId}/addBeer": {
+    "/client/wholesaler/{beerId}/addBeer": {
       "post": {
         "tags": [
           "ClientRequests"
@@ -189,7 +189,7 @@
         }
       }
     },
-    "/wholesalers/{wholesalerId}/quote": {
+    "/client/{wholesalerId}/quote": {
       "get": {
         "tags": [
           "ClientRequests"
@@ -263,9 +263,9 @@
     "schemas": {
       "AccType": {
         "enum": [
-          0,
           1,
-          2
+          2,
+          3
         ],
         "type": "integer",
         "format": "int32"

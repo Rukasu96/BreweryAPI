@@ -1,14 +1,14 @@
 [
   {
-    "ContainingType": "BreweryAPI.Requests.BreweryBeerRequests",
+    "ContainingType": "BreweryAPI.Requests.BeerRequests",
     "Method": "DeleteBeer",
-    "RelativePath": "brewery/beers/{id}/delete",
+    "RelativePath": "brewery/beers/{beerId}/delete",
     "HttpMethod": "DELETE",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "beerId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -22,9 +22,9 @@
     ]
   },
   {
-    "ContainingType": "BreweryAPI.Requests.BreweryBeerRequests",
+    "ContainingType": "BreweryAPI.Requests.BeerRequests",
     "Method": "UpdateBeer",
-    "RelativePath": "brewery/beers/{id}/update",
+    "RelativePath": "brewery/beers/{beerId}/update",
     "HttpMethod": "PUT",
     "IsController": false,
     "Order": 0,
@@ -35,7 +35,7 @@
         "IsRequired": false
       },
       {
-        "Name": "id",
+        "Name": "beerId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -49,9 +49,9 @@
     ]
   },
   {
-    "ContainingType": "BreweryAPI.Requests.BreweryBeerRequests",
+    "ContainingType": "BreweryAPI.Requests.BeerRequests",
     "Method": "CreateBeer",
-    "RelativePath": "brewery/beers/create",
+    "RelativePath": "brewery/createBear",
     "HttpMethod": "POST",
     "IsController": false,
     "Order": 0,
@@ -71,7 +71,51 @@
     ]
   },
   {
-    "ContainingType": "BreweryAPI.Requests.AccountRequest",
+    "ContainingType": "BreweryAPI.Requests.ClientRequests",
+    "Method": "GetQuote",
+    "RelativePath": "client/{wholesalerId}/quote",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "wholesalerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "BreweryAPI.Requests.ClientRequests",
+    "Method": "AddBeer",
+    "RelativePath": "client/wholesaler/{beerId}/addBeer",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "beerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "BreweryAPI.Requests.AccountRequests",
     "Method": "Delete",
     "RelativePath": "delete",
     "HttpMethod": "DELETE",
@@ -87,7 +131,7 @@
     ]
   },
   {
-    "ContainingType": "BreweryAPI.Requests.AccountRequest",
+    "ContainingType": "BreweryAPI.Requests.AccountRequests",
     "Method": "Login",
     "RelativePath": "login",
     "HttpMethod": "POST",
@@ -114,7 +158,7 @@
     ]
   },
   {
-    "ContainingType": "BreweryAPI.Requests.AccountRequest",
+    "ContainingType": "BreweryAPI.Requests.AccountRequests",
     "Method": "Register",
     "RelativePath": "register",
     "HttpMethod": "POST",
@@ -136,7 +180,7 @@
     ]
   },
   {
-    "ContainingType": "BreweryAPI.Requests.AccountRequest",
+    "ContainingType": "BreweryAPI.Requests.AccountRequests",
     "Method": "Update",
     "RelativePath": "update",
     "HttpMethod": "PUT",
@@ -159,7 +203,7 @@
   },
   {
     "ContainingType": "BreweryAPI.Requests.WholesalerRequests",
-    "Method": "AddBeer",
+    "Method": "AddWholesalerBeer",
     "RelativePath": "wholesaler/addBeer/{beerId}",
     "HttpMethod": "POST",
     "IsController": false,
@@ -181,53 +225,9 @@
   },
   {
     "ContainingType": "BreweryAPI.Requests.WholesalerRequests",
-    "Method": "RemoveBeer",
+    "Method": "RemoveBeerFromWholesalerStock",
     "RelativePath": "wholesaler/removeBeer/{beerId}",
     "HttpMethod": "DELETE",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "beerId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "BreweryAPI.Requests.ClientRequests",
-    "Method": "GetQuote",
-    "RelativePath": "wholesalers/{wholesalerId}/quote",
-    "HttpMethod": "GET",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "wholesalerId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "BreweryAPI.Requests.ClientRequests",
-    "Method": "AddBeer",
-    "RelativePath": "wholesalers/wholesaler/{beerId}/addBeer",
-    "HttpMethod": "POST",
     "IsController": false,
     "Order": 0,
     "Parameters": [

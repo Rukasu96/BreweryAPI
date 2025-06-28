@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
 using BreweryAPI.Entities;
+using BreweryAPI.Exceptions;
 
 namespace BreweryAPI.Services
 {
     public interface IWholesalerService
     {
-        void AddBeer(Beer beer);
-        void RemoveBeer(int beerId);
+        void AddWholesalerBeer(Beer beer);
+        void RemoveBeerFromWholesalerStock(Beer beer);
         string SendQuote(List<ShopBasket> clientShopBaskets);
+
     }
 
     public class WholesalerService : IWholesalerService
@@ -22,12 +24,11 @@ namespace BreweryAPI.Services
             this.userContext = userContext;
             this.mapper = mapper;
         }
-
-        public void AddBeer(Beer beer) 
+        public void AddWholesalerBeer(Beer beer)
         {
-            var wholesaler = context.Wholesalers.FirstOrDefault(x => x.Id == userContext.GetUserId);
+            var wholesaler = GetWholesaler;
 
-            if (context.Stocks.Any()) 
+            if (context.Stocks.Any())
             {
                 var beerStock = context.Stocks.Where(x => x.CompanyAccountId == beer.BreweryId).FirstOrDefault(x => x.BeerInStock.Name == beer.Name);
 
@@ -56,17 +57,15 @@ namespace BreweryAPI.Services
                 }
                 else
                 {
-                    //Error
+                    throw new NotFoundException("There's no beer in brewery stock");
                 }
             }
 
             context.SaveChanges();
         }
-
-        public void RemoveBeer(int beerId)
+        public void RemoveBeerFromWholesalerStock(Beer beer)
         {
-            var wholesaler = context.Wholesalers.FirstOrDefault(x => x.Id == userContext.GetUserId);
-            var beer = context.Beers.FirstOrDefault(x => x.Id == beerId);
+            var wholesaler = GetWholesaler();
 
             if (wholesaler.Stocks.Any())
             {
@@ -84,7 +83,6 @@ namespace BreweryAPI.Services
 
             context.SaveChanges();
         }
-
         public string SendQuote(List<ShopBasket> clientShopBaskets)
         {
             int finalQuantity = 0;
@@ -109,6 +107,17 @@ namespace BreweryAPI.Services
             finalPrice *= discount;
 
             return $"Your quote: {finalPrice}$";
+        }
+        private Wholesaler GetWholesaler()
+        {
+            var wholesaler = context.Wholesalers.FirstOrDefault(x => x.Id == userContext.GetUserId);
+            
+            if(wholesaler == null)
+            {
+                throw new NotFoundException("Wholesaler not found");
+            }
+
+            return wholesaler;
         }
     }
 }

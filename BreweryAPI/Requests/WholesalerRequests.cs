@@ -1,4 +1,7 @@
-﻿using BreweryAPI.Services;
+﻿using AutoMapper;
+using BreweryAPI.Entities;
+using BreweryAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BreweryAPI.Requests
@@ -7,22 +10,25 @@ namespace BreweryAPI.Requests
     {
         public static void RegisterEndpoints(WebApplication app)
         {
-            app.MapPost("wholesaler/addBeer/{beerId}", WholesalerRequests.AddBeer);
-            app.MapDelete("wholesaler/removeBeer/{beerId}", WholesalerRequests.RemoveBeer);
+            app.MapPost("wholesaler/addBeer/{beerId}", WholesalerRequests.AddWholesalerBeer);
+            app.MapDelete("wholesaler/removeBeer/{beerId}", WholesalerRequests.RemoveBeerFromWholesalerStock);
         }
 
-        public static IResult AddBeer(IBeerService beerService, IWholesalerService wholesalerService, int beerId)
+        [Authorize(Roles = "Wholesaler")]
+        public static IResult AddWholesalerBeer(IWholesalerService wholesalerService, IBeerService beerService, [FromRoute]int beerId)
         {
             var beer = beerService.GetById(beerId);
-            wholesalerService.AddBeer(beer);
-
-            return Results.Ok(beer);
+            wholesalerService.AddWholesalerBeer(beer);
+            return Results.Ok();
         }
 
-        public static IResult RemoveBeer(IWholesalerService beerService, [FromRoute]int beerId)
+        [Authorize(Roles = "Wholesaler")]
+        public static IResult RemoveBeerFromWholesalerStock(IWholesalerService wholesalerService, IBeerService beerService, [FromRoute]int beerId)
         {
-            beerService.RemoveBeer(beerId);
+            var beer = beerService.GetById(beerId);
+            wholesalerService.RemoveBeerFromWholesalerStock(beer);
             return Results.NoContent();
         }
+
     }
 }

@@ -1,4 +1,6 @@
-﻿using BreweryAPI.Entities;
+﻿using BreweryAPI.Authentication;
+using BreweryAPI.Entities;
+using BreweryAPI.Exceptions;
 using BreweryAPI.Models.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,9 +14,9 @@ namespace BreweryAPI.Services
 {
     public enum AccType
     {
-        Brewery,
-        Wholesaler,
-        Client
+        Brewery = 1,
+        Wholesaler = 2,
+        Client = 3
     }
 
     public interface IAccountService
@@ -48,9 +50,17 @@ namespace BreweryAPI.Services
 
             account = GetAccountType(dto, accountType);
 
-            //badRequest
+            if(account == null)
+            {
+                throw new BadRequestException("Invalid username or password");
+            }
+
             var result = passwordHasher.VerifyHashedPassword(account, account.PasswordHash, dto.Password);
-            //badRequest
+
+            if(result == PasswordVerificationResult.Failed)
+            {
+                throw new BadRequestException("Invalid username or password");
+            }
 
             var claims = new List<Claim>()
             {
@@ -126,7 +136,7 @@ namespace BreweryAPI.Services
 
             if (account == null)
             {
-                //notFound
+                throw new NotFoundException("User not found");
             }
 
             account.Name = dto.Name;
@@ -148,7 +158,7 @@ namespace BreweryAPI.Services
             
             if (account == null)
             {
-                //notFound
+                throw new NotFoundException("User not found");
             }
 
             context.Breweries.Remove(account);

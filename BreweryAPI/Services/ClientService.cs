@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BreweryAPI.Entities;
+using BreweryAPI.Exceptions;
 
 namespace BreweryAPI.Services
 {
@@ -23,7 +24,12 @@ namespace BreweryAPI.Services
         
         public void AddBeerToBasket(Beer beer)
         {
-            var client = context.Clients.FirstOrDefault(x => x.Id == userContext.GetUserId);
+            var client = GetClient();
+
+            if (client == null) 
+            {
+                throw new NotFoundException("user not found");
+            }
 
             if (context.ShopBaskets.Any())
             {
@@ -66,7 +72,7 @@ namespace BreweryAPI.Services
         
         public List<ShopBasket> GetBaskets(Guid wholesalerId)
         {
-            var client = context.Clients.FirstOrDefault(x => x.Id == userContext.GetUserId);
+            var client = GetClient();
             var wholesalerStocks = context.Stocks.Where(x => x.CompanyAccountId == wholesalerId).ToList();
             var baskets = context.ShopBaskets.Where(x => x.ClientId == client.Id).ToList();
 
@@ -87,6 +93,18 @@ namespace BreweryAPI.Services
             }
 
             return wholesalerBaskets;
+        }
+
+        private Client GetClient()
+        {
+            var client = context.Clients.FirstOrDefault(x => x.Id == userContext.GetUserId);
+
+            if(client == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            return client;
         }
     }
 }

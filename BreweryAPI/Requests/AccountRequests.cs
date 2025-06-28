@@ -2,20 +2,18 @@
 using BreweryAPI.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BreweryAPI.Requests
 {
-    public class AccountRequest
+    public class AccountRequests
     {
         public static void RegisterEndpoints(WebApplication app)
         {
-            app.MapPost("/register", AccountRequest.Register);
-            app.MapPost("/login", AccountRequest.Login);
-            app.MapPut("/update", AccountRequest.Update);
-            app.MapDelete("/delete", AccountRequest.Delete);
+            app.MapPost("/register", AccountRequests.Register);
+            app.MapPost("/login", AccountRequests.Login);
+            app.MapPut("/update", AccountRequests.Update);
+            app.MapDelete("/delete", AccountRequests.Delete);
         }
 
         public static IResult Register(IAccountService accountService, RegisterUserDto dto, IValidator<RegisterUserDto> validator)
@@ -36,14 +34,14 @@ namespace BreweryAPI.Requests
             return Results.Ok(token);
         }
 
-        [Authorize(Roles = "Brewery")]
+        [Authorize(Roles = "Brewery, Wholesaler, Client")]
         public static IResult Update(IAccountService accountService,[FromBody] AccountUpdateDto dto)
         {
             accountService.UpdateAccount(dto);
             return Results.Ok(dto);
         }
 
-        [Authorize(Roles = "Brewery")]
+        [Authorize(Roles = "Brewery, Wholesaler, Client")]
         public static IResult Delete(IAccountService accountService)
         {
             accountService.DeleteAccount();
