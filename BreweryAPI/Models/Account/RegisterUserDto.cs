@@ -1,4 +1,6 @@
-﻿namespace BreweryAPI.Models.Account
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BreweryAPI.Models.Account
 {
     public class RegisterUserDto
     {

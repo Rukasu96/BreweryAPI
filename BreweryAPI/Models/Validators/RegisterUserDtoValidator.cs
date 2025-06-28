@@ -1,6 +1,7 @@
 ﻿using BreweryAPI.Entities;
 using BreweryAPI.Models.Account;
 using FluentValidation;
+using System.Text.RegularExpressions;
 
 namespace BreweryAPI.Models.Validators
 {
@@ -13,6 +14,12 @@ namespace BreweryAPI.Models.Validators
             RuleFor(x => x.Password).MinimumLength(6);
 
             RuleFor(x => x.ConfirmPassword).Equal(e => e.Password);
+
+            RuleFor(x => x.PhoneNumber).NotEmpty()
+                .WithMessage("Phone Number is required.")
+                .MinimumLength(9).WithMessage("PhoneNumber must not be less than 10 characters.")
+                .MaximumLength(11).WithMessage("PhoneNumber must not exceed 11 characters.")
+                .Matches(new Regex(@"((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}")).WithMessage("PhoneNumber not valid");
 
             RuleFor(x => x.Email).Custom((value, context) =>
             {
