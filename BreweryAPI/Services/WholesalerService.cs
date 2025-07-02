@@ -7,18 +7,18 @@ namespace BreweryAPI.Services
     public interface IWholesalerService
     {
         void AddWholesalerBeer(Beer beer);
-        void RemoveBeerFromWholesalerStock(Beer beer);
+        void RemoveStock(int stockId);
         string SendQuote(List<ShopBasket> clientShopBaskets);
 
     }
 
     public class WholesalerService : IWholesalerService
     {
-        private readonly dbContext context;
+        private readonly DBaseContext context;
         private readonly IUserContextService userContext;
         private readonly IMapper mapper;
 
-        public WholesalerService(dbContext context, IUserContextService userContext, IMapper mapper)
+        public WholesalerService(DBaseContext context, IUserContextService userContext, IMapper mapper)
         {
             this.context = context;
             this.userContext = userContext;
@@ -31,6 +31,11 @@ namespace BreweryAPI.Services
             if (context.Stocks.Any())
             {
                 var beerStock = context.Stocks.Where(x => x.CompanyAccountId == beer.BreweryId).FirstOrDefault(x => x.BeerInStock.Name == beer.Name);
+
+                if(beerStock.Quantity == 0)
+                {
+                    throw new NotEnoughException("Not enough beer in stock");
+                }
 
                 if (beerStock != null)
                 {
@@ -63,22 +68,15 @@ namespace BreweryAPI.Services
 
             context.SaveChanges();
         }
-        public void RemoveBeerFromWholesalerStock(Beer beer)
+        public void RemoveStock(int stockId)
         {
             var wholesaler = GetWholesaler();
 
             if (wholesaler.Stocks.Any())
             {
-                var beerStock = wholesaler.Stocks.First(x => x.BeerInStock.Name == beer.Name);
+                var beerStock = wholesaler.Stocks.First(x => x.Id == stockId);
 
-                if (beerStock.Quantity > 0)
-                {
-                    beerStock.Quantity--;
-                }
-                else
-                {
-                    context.Stocks.Remove(beerStock);
-                }
+                context.Stocks.Remove(beerStock);
             }
 
             context.SaveChanges();
@@ -91,7 +89,7 @@ namespace BreweryAPI.Services
 
             foreach (var basket in clientShopBaskets)
             {
-                var beerPrice = context.Beers.First(x => x.Id == basket.BeerId).Price;
+                var beerPrice = context.Beers.First(x => x.Id == basket.BeerInBasketId).Price;
                 finalQuantity += basket.Quantity;
                 finalPrice += beerPrice * basket.Quantity;
             }
@@ -110,7 +108,7 @@ namespace BreweryAPI.Services
         }
         private Wholesaler GetWholesaler()
         {
-            var wholesaler = context.Wholesalers.FirstOrDefault(x => x.Id == userContext.GetUserId);
+            var wholesaler = context.UserAccounts.FirstOrDefault(x => x.Id == userContext.GetUserId) as Wholesaler;
             
             if(wholesaler == null)
             {

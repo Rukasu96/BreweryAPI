@@ -11,7 +11,7 @@ namespace BreweryAPI.Requests
         public static void RegisterEndpoints(WebApplication app)
         {
             app.MapPost("wholesaler/addBeer/{beerId}", WholesalerRequests.AddWholesalerBeer);
-            app.MapDelete("wholesaler/removeBeer/{beerId}", WholesalerRequests.RemoveBeerFromWholesalerStock);
+            app.MapDelete("wholesaler/removeStock/{stockId}", WholesalerRequests.RemoveBeerFromWholesalerStock);
         }
 
         [Authorize(Roles = "Wholesaler")]
@@ -23,10 +23,9 @@ namespace BreweryAPI.Requests
         }
 
         [Authorize(Roles = "Wholesaler")]
-        public static IResult RemoveBeerFromWholesalerStock(IWholesalerService wholesalerService, IBeerService beerService, [FromRoute]int beerId)
+        public static IResult RemoveBeerFromWholesalerStock(IWholesalerService wholesalerService, int stockId)
         {
-            var beer = beerService.GetById(beerId);
-            wholesalerService.RemoveBeerFromWholesalerStock(beer);
+            wholesalerService.RemoveStock(stockId);
             return Results.NoContent();
         }
 

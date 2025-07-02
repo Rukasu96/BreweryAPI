@@ -31,16 +31,6 @@
         "tags": [
           "AccountRequests"
         ],
-        "parameters": [
-          {
-            "name": "accountType",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/AccType"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -166,12 +156,21 @@
         }
       }
     },
-    "/client/wholesaler/{beerId}/addBeer": {
+    "/client/wholesaler/{wholesalerId}/addBeer/{beerId}": {
       "post": {
         "tags": [
           "ClientRequests"
         ],
         "parameters": [
+          {
+            "name": "wholesalerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
           {
             "name": "beerId",
             "in": "path",
@@ -235,14 +234,14 @@
         }
       }
     },
-    "/wholesaler/removeBeer/{beerId}": {
+    "/wholesaler/removeStock/{stockId}": {
       "delete": {
         "tags": [
           "WholesalerRequests"
         ],
         "parameters": [
           {
-            "name": "beerId",
+            "name": "stockId",
             "in": "path",
             "required": true,
             "schema": {
@@ -261,15 +260,6 @@
   },
   "components": {
     "schemas": {
-      "AccType": {
-        "enum": [
-          1,
-          2,
-          3
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
       "AccountUpdateDto": {
         "type": "object",
         "properties": {
@@ -296,14 +286,18 @@
         },
         "additionalProperties": false
       },
+      "BeerType": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
       "BeerUpdateDto": {
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "type": {
             "type": "string",
             "nullable": true
           },
@@ -314,6 +308,9 @@
           "strongValue": {
             "type": "number",
             "format": "double"
+          },
+          "type": {
+            "$ref": "#/components/schemas/BeerType"
           },
           "price": {
             "type": "number",
@@ -329,10 +326,6 @@
             "type": "string",
             "nullable": true
           },
-          "beerTypeId": {
-            "type": "integer",
-            "format": "int32"
-          },
           "ibuPercentage": {
             "type": "integer",
             "format": "int32"
@@ -340,6 +333,9 @@
           "strongValue": {
             "type": "number",
             "format": "double"
+          },
+          "type": {
+            "$ref": "#/components/schemas/BeerType"
           },
           "price": {
             "type": "number",

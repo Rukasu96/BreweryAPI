@@ -15,11 +15,11 @@ namespace BreweryAPI.Services
 
     public class BeerService : IBeerService
     {
-        private readonly dbContext context;
+        private readonly DBaseContext context;
         private readonly IMapper mapper;
         private readonly IUserContextService userContext;
 
-        public BeerService(dbContext context, IMapper mapper, IUserContextService userContext)
+        public BeerService(DBaseContext context, IMapper mapper, IUserContextService userContext)
         {
             this.context = context;
             this.mapper = mapper;
@@ -43,7 +43,6 @@ namespace BreweryAPI.Services
                         BeerInStock = beer,
                         Quantity = 1,
                         CompanyAccountId = userContext.GetUserId,
-                        BeerId = beer.Id
                     };
                     context.Stocks.Add(newStock);
                     context.Beers.Add(beer);
@@ -60,7 +59,6 @@ namespace BreweryAPI.Services
                     BeerInStock = beer,
                     Quantity = 1,
                     CompanyAccountId = userContext.GetUserId,
-                    BeerId = beer.Id
                 };
                 context.Stocks.Add(newStock);
                 context.Beers.Add(beer);

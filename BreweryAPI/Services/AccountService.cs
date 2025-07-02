@@ -12,30 +12,23 @@ using System.Text;
 
 namespace BreweryAPI.Services
 {
-    public enum AccType
-    {
-        Brewery = 1,
-        Wholesaler = 2,
-        Client = 3
-    }
-
     public interface IAccountService
     {
         void RegisterUser(RegisterUserDto dto);
-        string GenerateJwt(LoginDto dto, AccType accountType);
+        string GenerateJwt(LoginDto dto);
         void DeleteAccount();
         void UpdateAccount(AccountUpdateDto dto);
     }
 
     public class AccountService : IAccountService
     {
-        private readonly dbContext context;
+        private readonly DBaseContext context;
         private readonly IPasswordHasher<UserAccount> passwordHasher;
         private readonly IAuthorizationService authorizationService;
         private readonly AuthenticationSettings authenticationSettings;
         private readonly IUserContextService userContext;
 
-        public AccountService(dbContext context, IPasswordHasher<UserAccount> passwordHasher, AuthenticationSettings authenticationSettings, IAuthorizationService authorizationService, IUserContextService userContext)
+        public AccountService(DBaseContext context, IPasswordHasher<UserAccount> passwordHasher, AuthenticationSettings authenticationSettings, IAuthorizationService authorizationService, IUserContextService userContext)
         {
             this.context = context;
             this.passwordHasher = passwordHasher;
@@ -44,11 +37,11 @@ namespace BreweryAPI.Services
             this.userContext = userContext;
         }
 
-        public string GenerateJwt(LoginDto dto, AccType accountType)
+        public string GenerateJwt(LoginDto dto)
         {
             UserAccount account;
 
-            account = GetAccountType(dto, accountType);
+            account = context.UserAccounts.Include(x => x.Role).FirstOrDefault(x => x.Email == dto.Email);
 
             if(account == null)
             {
@@ -99,7 +92,7 @@ namespace BreweryAPI.Services
                         PhoneNumber = dto.PhoneNumber,
                         RoleId = dto.RoleId,
                     };
-                    context.Breweries.Add(newUser as Brewery);
+                    context.CompanyAccounts.Add(newUser as CompanyAccount);
                     break;
                 case 2:
                     newUser = new Wholesaler()
@@ -109,7 +102,7 @@ namespace BreweryAPI.Services
                         PhoneNumber = dto.PhoneNumber,
                         RoleId = dto.RoleId,
                     };
-                    context.Wholesalers.Add(newUser as Wholesaler);
+                    context.CompanyAccounts.Add(newUser as CompanyAccount);
                     break;
                 case 3:
                     newUser = new Client()
@@ -132,7 +125,7 @@ namespace BreweryAPI.Services
 
         public void UpdateAccount(AccountUpdateDto dto)
         {
-            var account = context.Breweries.FirstOrDefault(x => x.Id == userContext.GetUserId);
+            var account = context.UserAccounts.FirstOrDefault(x => x.Id == userContext.GetUserId);
 
             if (account == null)
             {
@@ -147,39 +140,32 @@ namespace BreweryAPI.Services
                 Street = dto.Street,
                 PostalCode = dto.PostalCode,
             };
-
+            context.Addresses.Add(account.Address);
             context.SaveChanges();
         }
 
         public void DeleteAccount()
         {
             //GetAccount Type and delete logged user
-            var account = context.Breweries.Include(x => x.Stocks).FirstOrDefault(x => x.Id == userContext.GetUserId);
+            var user = context.UserAccounts.FirstOrDefault(x => x.Id == userContext.GetUserId);
             
-            if (account == null)
+            if (user == null)
             {
                 throw new NotFoundException("User not found");
             }
 
-            context.Breweries.Remove(account);
+
+            //if(user.RoleId == 0)
+            //{
+            //    context.UserAccounts.Remove(user);
+            //}
+            //else
+            //{
+            //    var companyAccount = context.CompanyAccounts.Include(x => x.Stocks).FirstOrDefault(x => x.Id == user.Id);
+            //    context.CompanyAccounts.Remove(companyAccount);
+            //}
+            context.UserAccounts.Remove(user);
             context.SaveChanges();
-        }
-
-        private UserAccount GetAccountType(LoginDto dto, AccType accountType)
-        {
-            switch (accountType)
-            {
-                case AccType.Brewery:
-                    return context.Breweries.Include(x => x.Role).FirstOrDefault(x => x.Email == dto.Email);
-                case AccType.Wholesaler:
-                    return context.Wholesalers.Include(x => x.Role).FirstOrDefault(x => x.Email == dto.Email);
-                case AccType.Client:
-                    return context.Clients.Include(x => x.Role).FirstOrDefault(x => x.Email == dto.Email);
-                default:
-                    break;
-            }
-
-            return null;
         }
     }
 }

@@ -95,11 +95,16 @@
   {
     "ContainingType": "BreweryAPI.Requests.ClientRequests",
     "Method": "AddBeer",
-    "RelativePath": "client/wholesaler/{beerId}/addBeer",
+    "RelativePath": "client/wholesaler/{wholesalerId}/addBeer/{beerId}",
     "HttpMethod": "POST",
     "IsController": false,
     "Order": 0,
     "Parameters": [
+      {
+        "Name": "wholesalerId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
       {
         "Name": "beerId",
         "Type": "System.Int32",
@@ -142,11 +147,6 @@
         "Name": "dto",
         "Type": "BreweryAPI.Models.Account.LoginDto",
         "IsRequired": false
-      },
-      {
-        "Name": "accountType",
-        "Type": "BreweryAPI.Services.AccType",
-        "IsRequired": true
       }
     ],
     "ReturnTypes": [
@@ -226,13 +226,13 @@
   {
     "ContainingType": "BreweryAPI.Requests.WholesalerRequests",
     "Method": "RemoveBeerFromWholesalerStock",
-    "RelativePath": "wholesaler/removeBeer/{beerId}",
+    "RelativePath": "wholesaler/removeStock/{stockId}",
     "HttpMethod": "DELETE",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "beerId",
+        "Name": "stockId",
         "Type": "System.Int32",
         "IsRequired": true
       }

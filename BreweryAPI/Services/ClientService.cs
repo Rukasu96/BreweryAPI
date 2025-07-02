@@ -1,28 +1,29 @@
 ﻿using AutoMapper;
 using BreweryAPI.Entities;
 using BreweryAPI.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace BreweryAPI.Services
 {
     public interface IClientService
     {
-        void AddBeerToBasket(Beer beer);
+        void AddBeerToBasket(Beer beer, Guid wholesalerId);
         List<ShopBasket> GetBaskets(Guid wholesalerId);
     }
 
     public class ClientService : IClientService
     {
-        private readonly dbContext context;
+        private readonly DBaseContext context;
         private readonly IMapper mapper;
         private readonly IUserContextService userContext;
-        public ClientService(dbContext context, IMapper mapper, IUserContextService userContext)
+        public ClientService(DBaseContext context, IMapper mapper, IUserContextService userContext)
         {
             this.context = context;
             this.mapper = mapper;
             this.userContext = userContext;
         }
         
-        public void AddBeerToBasket(Beer beer)
+        public void AddBeerToBasket(Beer beer, Guid wholesalerId)
         {
             var client = GetClient();
 
@@ -33,7 +34,13 @@ namespace BreweryAPI.Services
 
             if (context.ShopBaskets.Any())
             {
-                var shopBasketStock = context.ShopBaskets.Where(x => (x.ClientId == client.Id)).FirstOrDefault(x => x.BeerInBasket.StockId == beer.StockId);
+                var wholesalerstock = context.Stocks.Where(x => x.CompanyAccountId == wholesalerId).FirstOrDefault(x => x.BeerInStock.Id == beer.Id);
+                var shopBasketStock = context.ShopBaskets.Where(x => (x.ClientId == client.Id)).FirstOrDefault(x => x.BeerInBasket.Id == wholesalerstock.BeerId);
+
+                if(wholesalerstock.Quantity == 0)
+                {
+                    throw new NotEnoughException("Not enouth beer in stock");
+                }
 
                 if (shopBasketStock != null)
                 {
@@ -48,10 +55,12 @@ namespace BreweryAPI.Services
                         BeerInBasket = newBeer,
                         Quantity = 1,
                         ClientId = client.Id,
-                        BeerId = newBeer.Id
+                        BeerInBasketId = newBeer.Id
                     };
                     context.ShopBaskets.Add(newShopBasket);
                 };
+
+                wholesalerstock.Quantity--;
             }
             else
             {
@@ -62,14 +71,14 @@ namespace BreweryAPI.Services
                     BeerInBasket = newBeer,
                     Quantity = 1,
                     ClientId = client.Id,
-                    BeerId = newBeer.Id
+                    BeerInBasketId = newBeer.Id
                 };
                 context.ShopBaskets.Add(newShopBasket);
             }
 
-                context.SaveChanges();
+            context.SaveChanges();
         }
-        
+
         public List<ShopBasket> GetBaskets(Guid wholesalerId)
         {
             var client = GetClient();
@@ -82,7 +91,7 @@ namespace BreweryAPI.Services
             {
                 foreach (var stock in wholesalerStocks)
                 {
-                    var beer = context.Beers.FirstOrDefault(x => basket.BeerId == x.Id);
+                    var beer = context.Beers.FirstOrDefault(x => basket.BeerInBasketId == x.Id);
                     var stockBeer = context.Beers.FirstOrDefault(x => x.Id == stock.BeerId);
                     if(stockBeer.Name == beer.Name)
                     {

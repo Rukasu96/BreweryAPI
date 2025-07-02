@@ -21,7 +21,7 @@ AuthenticationConfiguration.SetAuthentication(builder);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-builder.Services.AddDbContext<dbContext>(
+builder.Services.AddDbContext<DBaseContext>(
         option => option.UseSqlServer(builder.Configuration.GetConnectionString("ConnString"))
     );
 

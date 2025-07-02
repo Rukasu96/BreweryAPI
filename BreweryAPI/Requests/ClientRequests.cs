@@ -8,15 +8,15 @@ namespace BreweryAPI.Requests
     {
         public static void RegisterEndpoints(WebApplication app)
         {
-            app.MapPost("/client/wholesaler/{beerId}/addBeer", ClientRequests.AddBeer);
+            app.MapPost("/client/wholesaler/{wholesalerId}/addBeer/{beerId}", ClientRequests.AddBeer);
             app.MapGet("/client/{wholesalerId}/quote", ClientRequests.GetQuote);
         }
 
         [Authorize(Roles = "Client")]
-        public static IResult AddBeer(IBeerService beerService, IClientService clientService, [FromRoute] int beerId)
+        public static IResult AddBeer(IBeerService beerService, IClientService clientService, IWholesalerService wholesalerService, [FromRoute] Guid wholesalerId, [FromRoute] int beerId)
         {
             var beer = beerService.GetById(beerId);
-            clientService.AddBeerToBasket(beer);
+            clientService.AddBeerToBasket(beer, wholesalerId);
             return Results.Ok();
         }
 

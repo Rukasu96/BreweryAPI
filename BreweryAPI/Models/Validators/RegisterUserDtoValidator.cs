@@ -7,7 +7,7 @@ namespace BreweryAPI.Models.Validators
 {
     public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
     {
-        public RegisterUserDtoValidator(dbContext dbContext)
+        public RegisterUserDtoValidator(DBaseContext dbContext)
         {
             RuleFor(x => x.Email).NotEmpty().EmailAddress();
 
@@ -19,11 +19,11 @@ namespace BreweryAPI.Models.Validators
                 .WithMessage("Phone Number is required.")
                 .MinimumLength(9).WithMessage("PhoneNumber must not be less than 10 characters.")
                 .MaximumLength(11).WithMessage("PhoneNumber must not exceed 11 characters.")
-                .Matches(new Regex(@"((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}")).WithMessage("PhoneNumber not valid");
+                .Matches(new Regex(@"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{3,6}$")).WithMessage("PhoneNumber not valid");
 
             RuleFor(x => x.Email).Custom((value, context) =>
             {
-                var emailInUse = dbContext.Breweries.Any(u => u.Email == value);
+                var emailInUse = dbContext.UserAccounts.Any(u => u.Email == value);
 
                 if (emailInUse)
                 {

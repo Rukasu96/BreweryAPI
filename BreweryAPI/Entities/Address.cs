@@ -6,7 +6,7 @@
         public string City { get; set; }
         public string Street { get; set; }
         public string PostalCode { get; set; }
-        public Brewery Brewery { get; set; }
-        public Guid BreweryId { get; set; }
+        public UserAccount UserAccount { get; set; }
+        public Guid UserAccountId { get; set; }
     }
 }
